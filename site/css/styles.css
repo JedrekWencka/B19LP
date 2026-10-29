@@ -236,6 +236,7 @@ img, canvas, svg { display: block; max-width: 100%; }
   font-family: var(--mono); font-weight: 700; font-size: 10px; letter-spacing: .08em;
   padding: 3px 7px; border: 1px solid currentColor;
 }
+.tag.prod   { color: var(--magenta); }
 .tag.rec    { color: var(--red); }
 .tag.mix    { color: var(--cyan); }
 .tag.master { color: var(--yellow); }
@@ -248,6 +249,41 @@ img, canvas, svg { display: block; max-width: 100%; }
 }
 .wi-play:hover { background: var(--green); color: #000; border-color: var(--green); }
 .work-item.is-hidden { display: none; }
+.work-item.is-current .wi-title { color: var(--green); }
+.work-item.is-current .wi-num { color: var(--green); }
+.work-item.is-current .wi-play { background: var(--green); color: #000; border-color: var(--green); }
+.wi-play.is-off { opacity: .3; pointer-events: none; }
+
+/* =================== AUDIO DECK =================== */
+.deck {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  display: grid;
+  grid-template-columns: 52px minmax(160px, 260px) 1fr auto auto 32px;
+  align-items: center; gap: 18px;
+  padding: 12px var(--gutter);
+  background: #000;
+  border-top: 1px solid #00ff00;
+  box-shadow: 0 -10px 30px rgba(0,0,0,.6);
+}
+.deck[hidden] { display: none; }
+body.deck-open { padding-bottom: 80px; }
+.deck-play {
+  width: 52px; height: 52px; border: 1px solid #fff; font-size: 16px; letter-spacing: -1px;
+  transition: background .15s, color .15s;
+}
+.deck-play:hover { background: var(--green); color: #000; border-color: var(--green); }
+.deck-title { font-size: 16px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.deck-roles { display: flex; gap: 5px; margin-top: 6px; }
+.deck-roles .tag { font-size: 9px; padding: 2px 5px; }
+.deck-wave { width: 100%; height: 48px; cursor: pointer; touch-action: none; }
+.deck-time { font-size: 11px; color: #aaa; white-space: nowrap; }
+.deck-q { display: flex; border: 1px solid #333; }
+.deck-q button { padding: 7px 10px; font-size: 10px; letter-spacing: .08em; color: #777; }
+.deck-q button + button { border-left: 1px solid #333; }
+.deck-q button.is-active { background: #fff; color: #000; }
+.deck-q button[data-deck-q="flac"].is-active { background: var(--green); }
+.deck-close { font-size: 14px; color: #777; }
+.deck-close:hover { color: #fff; }
 .work-empty { padding: 40px 0; color: #777; font-family: var(--mono); font-size: 12px; }
 
 .player { margin: 40px var(--gutter) 0; border: 1px solid #333; }
@@ -342,6 +378,21 @@ img, canvas, svg { display: block; max-width: 100%; }
   .wi-year { display: none; }
   .footer { grid-template-columns: 1fr 1fr; }
   .footer-mid { grid-column: 1 / -1; order: 3; }
+}
+@media (max-width: 760px) {
+  .deck {
+    grid-template-columns: 44px 1fr auto 24px;
+    grid-template-areas: "p i q c" "w w w w" "t t t t";
+    gap: 8px 12px; padding: 10px var(--gutter) 12px;
+  }
+  .deck-play { grid-area: p; width: 44px; height: 44px; }
+  .deck-info { grid-area: i; min-width: 0; }
+  .deck-wave { grid-area: w; height: 40px; }
+  .deck-time { grid-area: t; text-align: right; margin-top: -4px; }
+  .deck-q { grid-area: q; }
+  .deck-close { grid-area: c; }
+  .deck-roles { display: none; }
+  body.deck-open { padding-bottom: 150px; }
 }
 @media (max-width: 560px) {
   .contact-body { flex-direction: column; align-items: flex-start; padding-top: 60px; }

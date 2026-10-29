@@ -2,3 +2,6 @@
 node_modules/
 dist/
 .env
+
+# audio is uploaded to the server separately (too big for git, and the masters stay private)
+site/audio/

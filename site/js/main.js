@@ -304,10 +304,15 @@
   if (xEl) window.addEventListener("pointermove", e => { xEl.textContent = e.clientX; yEl.textContent = e.clientY; }, { passive: true });
 
   /* =======================================================
-     7. WORK LIST + FILTER + PLAYER
+     7. WORK LIST + FILTER + PLAYERS
      ======================================================= */
   const list = $("[data-work-list]");
-  const ROLE_LABEL = { rec: "REC", mix: "MIX", master: "MASTER" };
+  const ROLE_LABEL = { prod: "PROD", rec: "REC", mix: "MIX", master: "MASTER" };
+  const fmt = s => {
+    if (!isFinite(s)) s = 0;
+    s = Math.floor(s);
+    return `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
+  };
 
   function embedFor(url) {
     try {
@@ -327,32 +332,156 @@
     return null;
   }
 
+  /* ---------- self-hosted audio player (deck) ---------- */
+  const deck = $("[data-deck]");
+  const audio = new Audio();
+  audio.preload = "metadata";
+  let current = null;           // { item, li }
+  let quality = "mp3";
+  try { if (localStorage.getItem("b19-quality") === "flac") quality = "flac"; } catch (_) {}
+
+  const deckPlay = $("[data-deck-play]"), deckTitle = $("[data-deck-title]");
+  const deckRoles = $("[data-deck-roles]"), deckTime = $("[data-deck-time]");
+  const deckQ = $$("[data-deck-q]"), deckWave = $("[data-deck-wave]");
+  const waveState = deckWave ? setupCanvas(deckWave) : null;
+
+  const srcFor = (item, q) => `audio/${item.audio}.${q}`;
+
+  function drawWave() {
+    if (!waveState || !current) return;
+    const { ctx, w, h } = waveState;
+    ctx.clearRect(0, 0, w, h);
+    const peaks = (window.B19_PEAKS || {})[current.item.audio] || [];
+    const n = peaks.length || 1;
+    const prog = audio.duration ? audio.currentTime / audio.duration : 0;
+    const bw = w / n;
+    const buffered = audio.buffered.length && audio.duration ? audio.buffered.end(audio.buffered.length - 1) / audio.duration : 0;
+    for (let i = 0; i < n; i++) {
+      const x = i * bw, frac = i / n;
+      const amp = Math.max(0.04, peaks[i]) * (h * 0.9);
+      ctx.fillStyle = frac < prog ? "#00ff00" : frac < buffered ? "#5a5a5a" : "#2e2e2e";
+      ctx.fillRect(x, (h - amp) / 2, Math.max(1, bw - 0.6), amp);
+    }
+    // playhead
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(prog * w, 0, 1.5, h);
+  }
+
+  function syncUI() {
+    const playing = !audio.paused;
+    if (deckPlay) {
+      deckPlay.textContent = playing ? "❚❚" : "▶";
+      deckPlay.setAttribute("aria-label", playing ? "Pause" : "Play");
+    }
+    $$(".work-item").forEach(li => {
+      const on = current && li === current.li;
+      li.classList.toggle("is-current", !!on);
+      const b = li.querySelector(".wi-play[data-audio]");
+      if (b) b.textContent = on && playing ? "❚❚ PAUSE" : "▶ PLAY";
+    });
+    deckQ.forEach(b => b.classList.toggle("is-active", b.dataset.deckQ === quality));
+    if (deckTime) deckTime.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+    drawWave();
+  }
+
+  function playItem(item, li) {
+    if (current && current.item === item) {
+      audio.paused ? audio.play() : audio.pause();
+      return;
+    }
+    current = { item, li };
+    audio.src = srcFor(item, quality);
+    audio.play().catch(() => {});
+    deck.hidden = false;
+    document.body.classList.add("deck-open");
+    deckTitle.textContent = `${item.artist} — ${item.title}`;
+    deckRoles.innerHTML = (item.roles || []).map(r => `<span class="tag ${r}">${ROLE_LABEL[r] || r}</span>`).join("");
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({ title: item.title, artist: item.artist, album: "B19 — Jędrzej Wencka" });
+    }
+    syncUI();
+  }
+
+  function setQuality(q) {
+    if (q === quality) return;
+    quality = q;
+    try { localStorage.setItem("b19-quality", q); } catch (_) {}
+    if (current) {
+      const t = audio.currentTime, wasPlaying = !audio.paused;
+      audio.src = srcFor(current.item, q);
+      audio.addEventListener("loadedmetadata", () => {
+        audio.currentTime = t;
+        if (wasPlaying) audio.play().catch(() => {});
+      }, { once: true });
+    }
+    syncUI();
+  }
+
+  ["play", "pause", "timeupdate", "loadedmetadata", "progress", "ended"].forEach(ev => audio.addEventListener(ev, syncUI));
+  audio.addEventListener("ended", () => {
+    // auto-advance to the next visible self-hosted track
+    const items = $$(".work-item:not(.is-hidden)").filter(li => li._item && li._item.audio);
+    const i = items.indexOf(current && current.li);
+    if (i > -1 && items[i + 1]) playItem(items[i + 1]._item, items[i + 1]);
+  });
+  if (deckPlay) deckPlay.addEventListener("click", () => current && (audio.paused ? audio.play() : audio.pause()));
+  deckQ.forEach(b => b.addEventListener("click", () => setQuality(b.dataset.deckQ)));
+  const deckClose = $("[data-deck-close]");
+  if (deckClose) deckClose.addEventListener("click", () => {
+    audio.pause(); audio.removeAttribute("src"); audio.load();
+    current = null; deck.hidden = true; document.body.classList.remove("deck-open"); syncUI();
+  });
+  if (deckWave) {
+    const seek = e => {
+      if (!audio.duration) return;
+      const r = deckWave.getBoundingClientRect();
+      audio.currentTime = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) * audio.duration;
+    };
+    let dragging = false;
+    deckWave.addEventListener("pointerdown", e => { dragging = true; deckWave.setPointerCapture(e.pointerId); seek(e); });
+    deckWave.addEventListener("pointermove", e => dragging && seek(e));
+    deckWave.addEventListener("pointerup", () => (dragging = false));
+  }
+  document.addEventListener("keydown", e => {
+    if (!current || e.code !== "Space" || /INPUT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) return;
+    e.preventDefault();
+    audio.paused ? audio.play() : audio.pause();
+  });
+
+  (function waveTick() {
+    if (current && !audio.paused) drawWave();
+    requestAnimationFrame(waveTick);
+  })();
+
+  /* ---------- build the list ---------- */
   if (list) {
     const data = window.B19_WORK || [];
-    if (!data.length) {
-      list.innerHTML = '<li class="work-empty">PORTFOLIO COMING SOON</li>';
-    }
+    if (!data.length) list.innerHTML = '<li class="work-empty">PORTFOLIO COMING SOON</li>';
     data.forEach((item, idx) => {
       const li = document.createElement("li");
       li.className = "work-item";
+      li._item = item;
       li.dataset.roles = (item.roles || []).join(" ");
       const tags = (item.roles || []).map(r => `<span class="tag ${r}">${ROLE_LABEL[r] || r}</span>`).join("");
-      const hasLink = !!item.link;
+      let action = '<span class="wi-play is-off">SOON</span>';
+      if (item.audio) action = '<button class="wi-play" data-audio>▶ PLAY</button>';
+      else if (item.link) action = '<button class="wi-play" data-embed>▶ LISTEN</button>';
       li.innerHTML = `
         <span class="wi-num">${pad(idx + 1)}</span>
         <span class="wi-title"></span>
         <span class="wi-roles">${tags}</span>
         <span class="wi-genre"></span>
         <span class="wi-year">${item.year || ""}</span>
-        ${hasLink ? '<button class="wi-play">▶ LISTEN</button>' : '<span class="wi-play" style="opacity:.3;pointer-events:none">SOON</span>'}`;
-      // set text safely
+        ${action}`;
       const titleEl = li.querySelector(".wi-title");
       titleEl.textContent = item.artist || "";
       const small = document.createElement("small");
       small.textContent = item.title || "";
       titleEl.append(small);
       li.querySelector(".wi-genre").textContent = item.genre || "";
-      if (hasLink) li.querySelector(".wi-play").addEventListener("click", () => openPlayer(item));
+      const btn = li.querySelector("button.wi-play");
+      if (btn && item.audio) btn.addEventListener("click", () => playItem(item, li));
+      if (btn && !item.audio) btn.addEventListener("click", () => openEmbed(item));
       list.append(li);
     });
 
@@ -363,16 +492,17 @@
     }));
   }
 
+  /* ---------- embed player for Spotify / YouTube links ---------- */
   const player = $("[data-player]");
-  function openPlayer(item) {
+  function openEmbed(item) {
     const emb = embedFor(item.link);
     if (!emb) { window.open(item.link, "_blank", "noopener"); return; }
+    if (current) audio.pause();
     const box = $("[data-player-embed]");
     box.innerHTML = "";
     const f = document.createElement("iframe");
     f.src = emb.src;
     f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
-    f.loading = "lazy";
     if (emb.h) f.style.height = emb.h + "px"; else f.style.aspectRatio = "16 / 9";
     box.append(f);
     $("[data-player-title]").textContent = `NOW PLAYING — ${item.artist} · ${item.title}`;

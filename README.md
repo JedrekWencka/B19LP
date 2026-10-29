@@ -26,8 +26,19 @@ cd site && python3 -m http.server 8000   # → http://localhost:8000
 
 ## Add portfolio work
 
-Edit `site/js/work-data.js`. Each entry has `artist`, `title`, `roles` (`rec`/`mix`/`master`),
-`genre`, `year`, `link` (Spotify / YouTube / SoundCloud links play in the built-in player).
+Edit `site/js/work-data.js`. Each entry has `artist`, `title`, `roles` (`prod`/`rec`/`mix`/`master`),
+`genre`, `year`, and either `audio` (a file in `site/audio/`, plays in the B19 player)
+or `link` (Spotify / YouTube / SoundCloud, plays in an embed).
+
+### Audio files
+
+Self-hosted tracks live in `site/audio/` as `<name>.mp3` (320 kbps, default stream) and
+`<name>.flac` (24-bit lossless, the "LOSSLESS" switch). Waveforms come from `site/js/peaks.js`.
+`site/audio/` is **not** in git (size, and the repo is public) — upload it to the server:
+
+```
+scp ~/Desktop/B19LP/site/audio/* root@2.28.230.117:/opt/b19lp/site/audio/
+```
 
 ## Deploy (Hetzner, 2.28.230.117)
 

@@ -94,6 +94,7 @@
     <span>WORK <i class="tri right"></i></span>
     <span class="work-filters" role="tablist">
       <button class="is-active" data-filter="all">ALL</button>
+      <button data-filter="prod">PROD</button>
       <button data-filter="rec">REC</button>
       <button data-filter="mix">MIX</button>
       <button data-filter="master">MASTER</button>
@@ -157,6 +158,22 @@
 
 </main>
 
+<!-- ============ AUDIO DECK (self-hosted tracks) ============ -->
+<div class="deck" data-deck hidden>
+  <button class="deck-play mono" data-deck-play aria-label="Play">▶</button>
+  <div class="deck-info">
+    <div class="deck-title" data-deck-title></div>
+    <div class="deck-roles" data-deck-roles></div>
+  </div>
+  <canvas class="deck-wave" data-deck-wave aria-label="Seek"></canvas>
+  <span class="deck-time mono" data-deck-time>00:00:00 / 00:00:00</span>
+  <div class="deck-q mono" role="group" aria-label="Stream quality">
+    <button data-deck-q="mp3" title="MP3 320 kbps — fast start">320K</button>
+    <button data-deck-q="flac" title="FLAC 24-bit — identical to the master">LOSSLESS</button>
+  </div>
+  <button class="deck-close mono" data-deck-close aria-label="Close player">✕</button>
+</div>
+
 <!-- ============ FOOTER ============ -->
 <footer class="footer mono">
   <nav aria-label="Footer">
@@ -170,6 +187,7 @@
 </footer>
 
 <script src="js/work-data.js"></script>
+<script src="js/peaks.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

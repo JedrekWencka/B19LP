@@ -42,5 +42,14 @@ window.B19_WORK = [
     genre: "",
     year: "",
     audio: "whitewater-octa"
+  },
+  {
+    artist: "Whitewater",
+    url: "https://whitewaterband.bandcamp.com/",
+    title: "Cedar",
+    roles: ["prod", "rec"],
+    genre: "",
+    year: "",
+    audio: "whitewater-cedar"
   }
 ];

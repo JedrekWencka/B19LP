@@ -16,6 +16,17 @@ deploy/nginx/default.conf
 deploy/update.sh    # pull + restart, run on the server
 ```
 
+## Languages (EN / PL)
+
+English is at `/`, Polish at `/pl/`. Both pages are **generated** — don't edit
+`site/index.html` or `site/pl/index.html` by hand. Instead edit:
+
+- `src/index.template.html` — the page layout (with `{{placeholders}}`)
+- `src/i18n.json` — all texts, in `en` and `pl`
+
+then run `python3 tools/build.py`. It also writes `site/sitemap.xml` and `site/robots.txt`.
+Button labels in the player (PLAY / ODTWÓRZ…) live at the top of `site/js/main.js`.
+
 ## Preview locally
 
 Open `site/index.html` in a browser, or:

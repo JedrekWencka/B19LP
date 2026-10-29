@@ -10,6 +10,17 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const rand = (a = 1, b) => (b === undefined ? Math.random() * a : a + Math.random() * (b - a));
 
+  /* ---------- UI strings (page language comes from <html lang>) ---------- */
+  const LANG = (document.documentElement.lang || "en").slice(0, 2);
+  const T = {
+    en: { play: "▶ PLAY", pause: "❚❚ PAUSE", listen: "▶ LISTEN", listenOut: "LISTEN ↗", close: "✕ CLOSE", soon: "SOON",
+          empty: "PORTFOLIO COMING SOON", aPlay: "Play", aPause: "Pause", aPlayAnim: "Play animation", aPauseAnim: "Pause animation" },
+    pl: { play: "▶ ODTWÓRZ", pause: "❚❚ PAUZA", listen: "▶ POSŁUCHAJ", listenOut: "POSŁUCHAJ ↗", close: "✕ ZAMKNIJ", soon: "WKRÓTCE",
+          empty: "PORTFOLIO WKRÓTCE", aPlay: "Odtwórz", aPause: "Pauza", aPlayAnim: "Uruchom animację", aPauseAnim: "Zatrzymaj animację" }
+  }[LANG] || null;
+  const t = T || { play: "▶ PLAY", pause: "❚❚ PAUSE", listen: "▶ LISTEN", listenOut: "LISTEN ↗", close: "✕ CLOSE", soon: "SOON",
+          empty: "PORTFOLIO COMING SOON", aPlay: "Play", aPause: "Pause", aPlayAnim: "Play animation", aPauseAnim: "Pause animation" };
+
   /* ---------- canvas helper: keeps backing store in sync with CSS size ---------- */
   function setupCanvas(canvas, maxDpr = 2) {
     const ctx = canvas.getContext("2d");
@@ -247,7 +258,7 @@
   if (pauseBtn) {
     const sync = () => {
       pauseBtn.textContent = paused ? "▶" : "❚❚";
-      pauseBtn.setAttribute("aria-label", paused ? "Play animation" : "Pause animation");
+      pauseBtn.setAttribute("aria-label", paused ? t.aPlayAnim : t.aPauseAnim);
       hero.classList.toggle("paused", paused);
     };
     pauseBtn.addEventListener("click", () => {
@@ -395,7 +406,7 @@
   const deckQ = $$("[data-deck-q]"), deckWave = $("[data-deck-wave]");
   const waveState = deckWave ? setupCanvas(deckWave) : null;
 
-  const srcFor = (item, q) => `audio/${item.audio}.${q}`;
+  const srcFor = (item, q) => `/audio/${item.audio}.${q}`;
 
   function drawWave() {
     if (!waveState || !current) return;
@@ -421,13 +432,13 @@
     const playing = !audio.paused;
     if (deckPlay) {
       deckPlay.textContent = playing ? "❚❚" : "▶";
-      deckPlay.setAttribute("aria-label", playing ? "Pause" : "Play");
+      deckPlay.setAttribute("aria-label", playing ? t.aPause : t.aPlay);
     }
     $$(".work-item").forEach(li => {
       const on = current && li === current.li;
       li.classList.toggle("is-current", !!on);
       const b = li.querySelector(".wi-play[data-audio]");
-      if (b) b.textContent = on && playing ? "❚❚ PAUSE" : "▶ PLAY";
+      if (b) b.textContent = on && playing ? t.pause : t.play;
     });
     deckQ.forEach(b => b.classList.toggle("is-active", b.dataset.deckQ === quality));
     if (deckTime) deckTime.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
@@ -508,17 +519,17 @@
     // always shown A–Z: band name, then song title (Polish letters sorted correctly)
     const byName = (a, b) => (a || "").localeCompare(b || "", "pl", { sensitivity: "base" });
     const data = [...(window.B19_WORK || [])].sort((a, b) => byName(a.artist, b.artist) || byName(a.title, b.title));
-    if (!data.length) list.innerHTML = '<li class="work-empty">PORTFOLIO COMING SOON</li>';
+    if (!data.length) list.innerHTML = `<li class="work-empty">${t.empty}</li>`;
     data.forEach((item, idx) => {
       const li = document.createElement("li");
       li.className = "work-item";
       li._item = item;
       li.dataset.roles = (item.roles || []).join(" ");
       const tags = (item.roles || []).map(r => `<span class="tag ${r}">${ROLE_LABEL[r] || r}</span>`).join("");
-      let action = '<span class="wi-play is-off">SOON</span>';
-      if (item.audio) action = '<button class="wi-play" data-audio>▶ PLAY</button>';
-      else if (item.link && embedFor(item.link)) action = '<button class="wi-play" data-embed>▶ LISTEN</button>';
-      else if (item.link) action = `<a class="wi-play" href="${encodeURI(item.link)}" target="_blank" rel="noopener">LISTEN ↗</a>`;
+      let action = `<span class="wi-play is-off">${t.soon}</span>`;
+      if (item.audio) action = `<button class="wi-play" data-audio>${t.play}</button>`;
+      else if (item.link && embedFor(item.link)) action = `<button class="wi-play" data-embed>${t.listen}</button>`;
+      else if (item.link) action = `<a class="wi-play" href="${encodeURI(item.link)}" target="_blank" rel="noopener">${t.listenOut}</a>`;
       li.innerHTML = `
         <span class="wi-num">${pad(idx + 1)}</span>
         <span class="wi-title"></span>
@@ -553,7 +564,7 @@
     const { li, panel, btn } = openRow;
     openRow = null;
     li.classList.remove("is-open");
-    btn.textContent = "▶ LISTEN";
+    btn.textContent = t.listen;
     btn.setAttribute("aria-expanded", "false");
     panel.classList.remove("is-open");
     // remove the iframe after the collapse animation (also stops playback)
@@ -582,7 +593,7 @@
     li.after(panel);
 
     li.classList.add("is-open");
-    btn.textContent = "✕ CLOSE";
+    btn.textContent = t.close;
     btn.setAttribute("aria-expanded", "true");
     openRow = { li, panel, btn };
     requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add("is-open")));
@@ -621,6 +632,15 @@
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
     if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  }));
+
+  // language switch keeps you in the same section (e.g. /pl/#work)
+  $$("[data-lang-link]").forEach(a => a.addEventListener("click", () => {
+    const sec = ["contact", "work", "services"].find(id => {
+      const el = document.getElementById(id);
+      return el && el.getBoundingClientRect().top < window.innerHeight * 0.4;
+    });
+    if (sec) a.href = a.getAttribute("href").split("#")[0] + "#" + sec;
   }));
 
   const yearEl = $("[data-year]");

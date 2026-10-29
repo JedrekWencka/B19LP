@@ -192,7 +192,7 @@ img, canvas, svg { display: block; max-width: 100%; }
 }
 .service { text-align: center; }
 .viz { width: 100%; max-width: 300px; aspect-ratio: 1; margin: 0 auto 36px; }
-.service h3 { font-weight: 400; font-size: clamp(22px, 2vw, 28px); letter-spacing: 0.02em; margin: 0 0 22px; }
+.service h3, .service .service-title { font-weight: 400; font-size: clamp(22px, 2vw, 28px); letter-spacing: 0.02em; margin: 0 0 22px; }
 .service p { margin: 0 auto; max-width: 36ch; font-size: 16px; line-height: 1.75; color: #eee; }
 .coords {
   display: flex; flex-direction: column; gap: 4px;
@@ -380,6 +380,23 @@ body.deck-open { padding-bottom: 80px; }
 .footer-right a { text-decoration: underline; text-underline-offset: 3px; }
 .footer-right a:hover { color: var(--green); }
 
+/* =================== LANGUAGE SWITCH =================== */
+.header-tools { display: flex; align-items: center; justify-content: flex-end; gap: 22px; margin-top: 18px; }
+.header-tools .social { margin-top: 0; }
+.lang-switch { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .12em; }
+.lang-switch a { color: #777; padding: 2px 0; transition: color .15s; }
+.lang-switch a:hover { color: #fff; }
+.lang-switch a.is-active { color: var(--green); }
+.lang-switch .sep { color: #444; }
+.header-mobile { display: none; align-items: center; gap: 22px; justify-self: end; }
+.footer-mid { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.footer-lang .lang-switch, .footer-lang { font-size: 11px; }
+.footer-lang a { color: #777; } .footer-lang a.is-active { color: var(--green); } .footer-lang .sep { color: #444; margin: 0 6px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* long Polish standby text may wrap on small screens */
+html[lang="pl"] .standby { width: max-content; max-width: 88vw; }
+html[lang="pl"] .standby span { white-space: normal; text-align: center; }
+
 /* =================== RESPONSIVE =================== */
 @media (max-width: 1100px) {
   .work-item { grid-template-columns: 50px 1.6fr 1fr 70px 110px; }
@@ -387,7 +404,8 @@ body.deck-open { padding-bottom: 80px; }
 }
 @media (max-width: 900px) {
   .nav, .header-right { display: none; }
-  .burger { display: flex; justify-self: end; }
+  .burger { display: flex; }
+  .header-mobile { display: flex; }
   .header { grid-template-columns: 1fr auto; align-items: center; padding-bottom: 18px; }
   .services-grid { grid-template-columns: 1fr; gap: 80px; }
   .about { grid-template-columns: 1fr; }

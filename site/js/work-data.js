@@ -1,5 +1,6 @@
 /* =========================================================
    PORTFOLIO — edit this list to add / remove your work.
+   Order here doesn't matter: the site sorts A–Z by band, then song.
    ---------------------------------------------------------
    artist : band / artist name
    title  : song, EP or album title

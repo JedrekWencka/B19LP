@@ -468,7 +468,9 @@
 
   /* ---------- build the list ---------- */
   if (list) {
-    const data = window.B19_WORK || [];
+    // always shown A–Z: band name, then song title (Polish letters sorted correctly)
+    const byName = (a, b) => (a || "").localeCompare(b || "", "pl", { sensitivity: "base" });
+    const data = [...(window.B19_WORK || [])].sort((a, b) => byName(a.artist, b.artist) || byName(a.title, b.title));
     if (!data.length) list.innerHTML = '<li class="work-empty">PORTFOLIO COMING SOON</li>';
     data.forEach((item, idx) => {
       const li = document.createElement("li");

@@ -12,8 +12,13 @@
               <name>.mp3 (320 kbps) and <name>.flac
    url    : artist's page (Bandcamp etc.) — the artist name links
             to it, opens in a new tab. Optional.
-   link   : Spotify / YouTube / SoundCloud / Bandcamp URL,
-            used only when there's no "audio" file.
+   link   : used only when there's no "audio" file. Paste a normal
+            share link from: YouTube (incl. YT Music, Shorts), Vimeo,
+            Spotify, SoundCloud, Apple Music, Deezer, Tidal.
+            It opens as a small player under the track row.
+            Bandcamp: use the link from Share/Embed → "EmbeddedPlayer"
+            (src="https://bandcamp.com/EmbeddedPlayer/...").
+            Any other link opens in a new tab ("LISTEN ↗").
    ========================================================= */
 window.B19_WORK = [
   {

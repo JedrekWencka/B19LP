@@ -314,21 +314,58 @@
     return `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
   };
 
+  // Turns a normal share link into an embeddable player.
+  // h = height in px for audio players, 0 = 16:9 video. null = can't embed → opens in a new tab.
   function embedFor(url) {
-    try {
-      const u = new URL(url);
-      if (u.hostname.includes("spotify.com")) {
-        const path = u.pathname.replace(/^\/intl-[a-z]+/, "");
-        return { src: `https://open.spotify.com/embed${path}?theme=0`, h: path.includes("/track/") ? 152 : 380 };
-      }
-      if (u.hostname.includes("youtube.com") || u.hostname === "youtu.be") {
-        const id = u.hostname === "youtu.be" ? u.pathname.slice(1) : u.searchParams.get("v");
-        if (id) return { src: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`, h: 0 };
-      }
-      if (u.hostname.includes("soundcloud.com")) {
-        return { src: `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%2300ff00&auto_play=true`, h: 166 };
-      }
-    } catch (_) {}
+    let u;
+    try { u = new URL(url); } catch (_) { return null; }
+    const host = u.hostname.replace(/^(www|m)\./, "");
+    const path = u.pathname;
+    const single = /\/(track|song)s?\//.test(path) || u.searchParams.has("i");
+
+    // YouTube / YouTube Music / Shorts / youtu.be
+    if (/(^|\.)youtube\.com$/.test(host) || host === "youtu.be") {
+      const id = host === "youtu.be" ? path.slice(1)
+        : path.startsWith("/shorts/") ? path.split("/")[2]
+        : path.startsWith("/embed/") ? path.split("/")[2]
+        : u.searchParams.get("v");
+      if (id) return { src: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`, h: 0 };
+    }
+    // Vimeo
+    if (host === "vimeo.com" || host === "player.vimeo.com") {
+      const id = (path.match(/(\d+)/) || [])[1];
+      if (id) return { src: `https://player.vimeo.com/video/${id}?autoplay=1&dnt=1`, h: 0 };
+    }
+    // Spotify
+    if (host === "open.spotify.com") {
+      const p = path.replace(/^\/intl-[a-z]+/, "").replace(/^\/embed/, "");
+      return { src: `https://open.spotify.com/embed${p}?theme=0`, h: p.startsWith("/track/") || p.startsWith("/episode/") ? 152 : 352 };
+    }
+    // SoundCloud
+    if (host === "soundcloud.com" || host === "on.soundcloud.com") {
+      const sets = path.includes("/sets/");
+      return { src: `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%2300ff00&auto_play=true&visual=false&show_comments=false`, h: sets ? 300 : 166 };
+    }
+    // Apple Music
+    if (host === "music.apple.com" || host === "embed.music.apple.com") {
+      return { src: `https://embed.music.apple.com${path}${u.search}`, h: single ? 175 : 450 };
+    }
+    // Deezer (track / album / playlist)
+    if (host === "deezer.com" || host.endsWith(".deezer.com")) {
+      const m = path.match(/\/(track|album|playlist)\/(\d+)/);
+      if (m) return { src: `https://widget.deezer.com/widget/dark/${m[1]}/${m[2]}`, h: m[1] === "track" ? 150 : 300 };
+    }
+    // Tidal
+    if (host === "tidal.com" || host === "listen.tidal.com") {
+      const m = path.match(/\/(track|album|playlist)\/([\w-]+)/);
+      if (m) return { src: `https://embed.tidal.com/${m[1]}s/${m[2]}`, h: m[1] === "track" ? 120 : 300 };
+    }
+    // Bandcamp: needs the "EmbeddedPlayer" link from Share / Embed on Bandcamp
+    // (a normal bandcamp page link can't be embedded → opens in a new tab)
+    if (host === "bandcamp.com" && path.startsWith("/EmbeddedPlayer/")) {
+      const small = path.includes("size=small");
+      return { src: url, h: small ? 42 : (path.includes("tracklist=true") ? 300 : 120) };
+    }
     return null;
   }
 
@@ -480,7 +517,8 @@
       const tags = (item.roles || []).map(r => `<span class="tag ${r}">${ROLE_LABEL[r] || r}</span>`).join("");
       let action = '<span class="wi-play is-off">SOON</span>';
       if (item.audio) action = '<button class="wi-play" data-audio>▶ PLAY</button>';
-      else if (item.link) action = '<button class="wi-play" data-embed>▶ LISTEN</button>';
+      else if (item.link && embedFor(item.link)) action = '<button class="wi-play" data-embed>▶ LISTEN</button>';
+      else if (item.link) action = `<a class="wi-play" href="${encodeURI(item.link)}" target="_blank" rel="noopener">LISTEN ↗</a>`;
       li.innerHTML = `
         <span class="wi-num">${pad(idx + 1)}</span>
         <span class="wi-title"></span>
@@ -538,7 +576,7 @@
     f.title = `${item.artist} — ${item.title}`;
     f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
     f.className = emb.h ? "is-audio" : "is-video";
-    if (emb.h) f.style.height = Math.min(emb.h, 152) + "px";
+    if (emb.h) f.style.height = emb.h + "px";
     inner.append(f);
     panel.append(inner);
     li.after(panel);

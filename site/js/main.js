@@ -301,7 +301,7 @@
      6. LIVE COORDINATES
      ======================================================= */
   const xEl = $("[data-x]"), yEl = $("[data-y]");
-  if (xEl) window.addEventListener("pointermove", e => { xEl.textContent = e.clientX; yEl.textContent = e.clientY; }, { passive: true });
+  if (xEl) window.addEventListener("pointermove", e => { xEl.textContent = Math.round(e.clientX); yEl.textContent = Math.round(e.clientY); }, { passive: true });
 
   /* =======================================================
      7. WORK LIST + FILTER + PLAYERS
@@ -496,7 +496,7 @@
       li.querySelector(".wi-genre").textContent = item.genre || "";
       const btn = li.querySelector("button.wi-play");
       if (btn && item.audio) btn.addEventListener("click", () => playItem(item, li));
-      if (btn && !item.audio) btn.addEventListener("click", () => openEmbed(item));
+      if (btn && !item.audio) { btn.setAttribute("aria-expanded", "false"); btn.addEventListener("click", () => openEmbed(item, li, btn)); }
       list.append(li);
     });
 
@@ -507,25 +507,52 @@
     }));
   }
 
-  /* ---------- embed player for Spotify / YouTube links ---------- */
-  const player = $("[data-player]");
-  function openEmbed(item) {
+  /* ---------- embed (YouTube / Spotify / SoundCloud) as an accordion under its row ---------- */
+  let openRow = null;   // { li, panel, btn }
+
+  function closeEmbed() {
+    if (!openRow) return;
+    const { li, panel, btn } = openRow;
+    openRow = null;
+    li.classList.remove("is-open");
+    btn.textContent = "▶ LISTEN";
+    btn.setAttribute("aria-expanded", "false");
+    panel.classList.remove("is-open");
+    // remove the iframe after the collapse animation (also stops playback)
+    setTimeout(() => panel.remove(), 350);
+  }
+
+  function openEmbed(item, li, btn) {
+    if (openRow && openRow.li === li) { closeEmbed(); return; }
     const emb = embedFor(item.link);
     if (!emb) { window.open(item.link, "_blank", "noopener"); return; }
-    if (current) audio.pause();
-    const box = $("[data-player-embed]");
-    box.innerHTML = "";
+    closeEmbed();
+    if (current && !audio.paused) audio.pause();
+
+    const panel = document.createElement("li");
+    panel.className = "work-embed";
+    const inner = document.createElement("div");
+    inner.className = "work-embed-inner";
     const f = document.createElement("iframe");
     f.src = emb.src;
+    f.title = `${item.artist} — ${item.title}`;
     f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
-    if (emb.h) f.style.height = emb.h + "px"; else f.style.aspectRatio = "16 / 9";
-    box.append(f);
-    $("[data-player-title]").textContent = `NOW PLAYING — ${item.artist} · ${item.title}`;
-    player.hidden = false;
-    player.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    f.className = emb.h ? "is-audio" : "is-video";
+    if (emb.h) f.style.height = Math.min(emb.h, 152) + "px";
+    inner.append(f);
+    panel.append(inner);
+    li.after(panel);
+
+    li.classList.add("is-open");
+    btn.textContent = "✕ CLOSE";
+    btn.setAttribute("aria-expanded", "true");
+    openRow = { li, panel, btn };
+    requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add("is-open")));
   }
-  const closeBtn = $("[data-player-close]");
-  if (closeBtn) closeBtn.addEventListener("click", () => { player.hidden = true; $("[data-player-embed]").innerHTML = ""; });
+
+  // starting a B19 track or changing the filter closes an open embed
+  audio.addEventListener("play", closeEmbed);
+  $$(".work-filters button").forEach(b => b.addEventListener("click", closeEmbed));
 
   /* =======================================================
      8. NAV: mobile menu + active section

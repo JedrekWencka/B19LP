@@ -51,5 +51,14 @@ window.B19_WORK = [
     genre: "",
     year: "",
     audio: "whitewater-cedar"
+  },
+  {
+    artist: "Camping Hill",
+    title: "Brudne Serca",
+    roles: ["prod", "rec", "mix", "master"],
+    genre: "",
+    year: "",
+    // no master file yet → plays the YouTube video in the page
+    link: "https://www.youtube.com/watch?v=c2w_vgFjx_o"
   }
 ];

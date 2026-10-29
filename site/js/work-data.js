@@ -23,7 +23,7 @@ window.B19_WORK = [
   },
   {
     artist: "Impala",
-    title: "Bejsment",
+    title: "Miło Było",
     roles: ["prod", "rec", "mix", "master"],
     genre: "",
     year: "",

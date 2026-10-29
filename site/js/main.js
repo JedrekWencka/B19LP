@@ -332,6 +332,19 @@
     return null;
   }
 
+  // artist name as a link to their page (Bandcamp etc.) when "url" is set
+  function artistNode(item) {
+    if (!item.url) return document.createTextNode(item.artist || "");
+    const a = document.createElement("a");
+    a.className = "artist-link";
+    a.href = item.url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = item.artist || "";
+    a.title = `${item.artist} — ${new URL(item.url).hostname.replace(/^www\./, "")}`;
+    return a;
+  }
+
   /* ---------- self-hosted audio player (deck) ---------- */
   const deck = $("[data-deck]");
   const audio = new Audio();
@@ -394,7 +407,7 @@
     audio.play().catch(() => {});
     deck.hidden = false;
     document.body.classList.add("deck-open");
-    deckTitle.textContent = `${item.artist} — ${item.title}`;
+    deckTitle.replaceChildren(artistNode(item), document.createTextNode(` — ${item.title}`));
     deckRoles.innerHTML = (item.roles || []).map(r => `<span class="tag ${r}">${ROLE_LABEL[r] || r}</span>`).join("");
     if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({ title: item.title, artist: item.artist, album: "B19 — Jędrzej Wencka" });
@@ -474,7 +487,7 @@
         <span class="wi-year">${item.year || ""}</span>
         ${action}`;
       const titleEl = li.querySelector(".wi-title");
-      titleEl.textContent = item.artist || "";
+      titleEl.append(artistNode(item));
       const small = document.createElement("small");
       small.textContent = item.title || "";
       titleEl.append(small);

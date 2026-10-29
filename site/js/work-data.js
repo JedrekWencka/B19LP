@@ -9,12 +9,15 @@
    audio  : file name (without extension) in site/audio/
             → plays in the B19 player. Needs both
               <name>.mp3 (320 kbps) and <name>.flac
+   url    : artist's page (Bandcamp etc.) — the artist name links
+            to it, opens in a new tab. Optional.
    link   : Spotify / YouTube / SoundCloud / Bandcamp URL,
             used only when there's no "audio" file.
    ========================================================= */
 window.B19_WORK = [
   {
     artist: "Whitewater",
+    url: "https://whitewaterband.bandcamp.com/",
     title: "Gold Formula",
     roles: ["prod", "rec", "mix", "master"],
     genre: "",
@@ -23,6 +26,7 @@ window.B19_WORK = [
   },
   {
     artist: "Impala",
+    url: "https://impalacore.bandcamp.com/album/25",
     title: "Miło Było",
     roles: ["prod", "rec", "mix", "master"],
     genre: "",
@@ -31,6 +35,7 @@ window.B19_WORK = [
   },
   {
     artist: "Whitewater",
+    url: "https://whitewaterband.bandcamp.com/",
     title: "Octa",
     roles: ["prod", "rec"],
     genre: "",

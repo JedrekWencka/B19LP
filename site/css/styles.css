@@ -256,6 +256,12 @@ img, canvas, svg { display: block; max-width: 100%; }
 .work-item.is-current .wi-play { background: var(--green); color: #000; border-color: var(--green); }
 .wi-play.is-off { opacity: .3; pointer-events: none; }
 
+/* artist names link to their Bandcamp */
+.artist-link { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(255,255,255,.35); transition: color .15s, text-decoration-color .15s; }
+.artist-link::after { content: " ↗"; font-size: .6em; vertical-align: super; opacity: .6; }
+.artist-link:hover { color: var(--green); text-decoration-color: var(--green); }
+.deck-title .artist-link { text-underline-offset: 3px; }
+
 /* =================== AUDIO DECK =================== */
 .deck {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;

@@ -86,6 +86,7 @@ img, canvas, svg { display: block; max-width: 100%; }
 }
 .mobile-menu[hidden] { display: none; }
 .mobile-menu a:hover { color: var(--green); }
+.mobile-menu .mm-social { margin-top: 24px; font-size: 16px; color: #aaa; }
 
 /* =================== HERO =================== */
 .hero { background: var(--black); }

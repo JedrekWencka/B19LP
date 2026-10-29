@@ -532,6 +532,14 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // "#top" points at the sticky header, which is always on screen, so the
+  // browser's own jump does nothing. Scroll to the very top ourselves.
+  $$('a[href="#top"]').forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  }));
+
   const yearEl = $("[data-year]");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 

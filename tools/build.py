@@ -32,6 +32,17 @@ LANGS = {
 }
 
 
+# Polish typography: a one-letter word (i, a, w, z, o, u …) must not end a line.
+# Glue it to the next word with a non-breaking space.
+ORPHAN = re.compile(r"(?<![\w&])([AaIiOoUuWwZz])\s+")
+NO_ORPHAN_KEYS = {"og_locale", "og_locale_alt"}
+
+
+def fix_orphans(text: str) -> str:
+    text = ORPHAN.sub(lambda m: m.group(1) + "\u00a0", text)
+    return re.sub(r"\s+—", "\u00a0—", text)   # a dash never starts a line
+
+
 def lang_switch(current: str) -> str:
     parts = []
     for code, (_, url) in LANGS.items():
@@ -61,6 +72,8 @@ def main() -> int:
 
     for code, (out, url) in LANGS.items():
         values = dict(strings[code])
+        if code == "pl":
+            values = {k: (v if k in NO_ORPHAN_KEYS else fix_orphans(v)) for k, v in values.items()}
         values.update(
             lang=code,
             canonical=url,

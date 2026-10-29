@@ -397,6 +397,18 @@ body.deck-open { padding-bottom: 80px; }
 html[lang="pl"] .standby { width: max-content; max-width: 88vw; }
 html[lang="pl"] .standby span { white-space: normal; text-align: center; }
 
+/* =================== JUSTIFIED BODY TEXT =================== */
+/* hyphens:auto uses the page language (lang="pl" / "en") for correct word breaks */
+.service p, .about p {
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;   /* only split longer words, keep ≥3 letters each side */
+  text-wrap: pretty;               /* avoids a lonely last word where supported */
+}
+.service p { text-align-last: center; }   /* centered columns: last line stays centered */
+.about p   { text-align-last: left; }
+
 /* =================== RESPONSIVE =================== */
 @media (max-width: 1100px) {
   .work-item { grid-template-columns: 50px 1.6fr 1fr 70px 110px; }

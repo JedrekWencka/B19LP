@@ -26,7 +26,7 @@ window.B19_WORK = [
     url: "https://whitewaterband.bandcamp.com/",
     title: "Gold Formula",
     roles: ["prod", "rec", "mix", "master"],
-    genre: "",
+    genre: "Stoner rock",
     year: "",
     audio: "whitewater-gold-formula"
   },
@@ -35,8 +35,8 @@ window.B19_WORK = [
     url: "https://impalacore.bandcamp.com/album/25",
     title: "Miło Było",
     roles: ["prod", "rec", "mix", "master"],
-    genre: "",
-    year: "",
+    genre: "Metalcore",
+    year: 2025,
     audio: "impala-bejsment"
   },
   {
@@ -44,8 +44,8 @@ window.B19_WORK = [
     url: "https://whitewaterband.bandcamp.com/",
     title: "Octa",
     roles: ["prod", "rec"],
-    genre: "",
-    year: "",
+    genre: "Stoner rock",
+    year: 2025,
     audio: "whitewater-octa"
   },
   {
@@ -53,8 +53,8 @@ window.B19_WORK = [
     url: "https://whitewaterband.bandcamp.com/",
     title: "Cedar",
     roles: ["prod", "rec"],
-    genre: "",
-    year: "",
+    genre: "Stoner rock",
+    year: 2024,
     audio: "whitewater-cedar"
   },
   {
@@ -62,7 +62,7 @@ window.B19_WORK = [
     title: "Brudne Serca",
     roles: ["prod", "rec", "mix", "master"],
     genre: "",
-    year: "",
+    year: 2025,
     // no master file yet → plays the YouTube video in the page
     link: "https://www.youtube.com/watch?v=c2w_vgFjx_o"
   }

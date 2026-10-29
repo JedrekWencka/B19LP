@@ -86,7 +86,8 @@ img, canvas, svg { display: block; max-width: 100%; }
 }
 .mobile-menu[hidden] { display: none; }
 .mobile-menu a:hover { color: var(--green); }
-.mobile-menu .mm-social { margin-top: 24px; font-size: 16px; color: #aaa; }
+.mobile-menu .mm-social { justify-content: flex-start; gap: 22px; margin-top: 20px; }
+.mobile-menu .mm-social a { width: 28px; height: 28px; }
 
 /* =================== HERO =================== */
 .hero { background: var(--black); }

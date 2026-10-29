@@ -521,6 +521,9 @@
     burger.addEventListener("click", () => setOpen(menu.hidden));
     $$("a", menu).forEach(a => a.addEventListener("click", () => setOpen(false)));
   }
+  // phone menu reuses the header's social icons
+  const mmSocial = $("[data-mm-social]"), headSocial = $(".header .social");
+  if (mmSocial && headSocial) mmSocial.innerHTML = headSocial.innerHTML;
   const sections = ["work", "services", "contact"].map(id => document.getElementById(id)).filter(Boolean);
   const navLinks = $$(".nav a, .footer nav a");
   const onScroll = () => {

@@ -11,7 +11,7 @@ site/
   js/main.js        # animations & interactions
   js/work-data.js   # ← portfolio list, edit this to add your work
   assets/
-docker-compose.yml  # nginx container on port 8080
+docker-compose.yml  # nginx container (no public port; reached via the band site's proxy)
 deploy/nginx/default.conf
 deploy/update.sh    # pull + restart, run on the server
 ```
@@ -60,7 +60,7 @@ git clone https://github.com/JedrekWencka/B19LP.git /opt/b19lp
 cd /opt/b19lp && docker compose up -d
 ```
 
-Site: **http://2.28.230.117:8080**
+Site: **https://b19studio.net** (proxied by the band site's nginx — see deploy/setup-domain.sh, deploy/close-port-8080.sh)
 
 After pushing changes from your Mac:
 

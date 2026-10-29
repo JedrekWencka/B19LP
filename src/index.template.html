@@ -18,6 +18,12 @@
   <meta property="og:url" content="{{canonical}}">
   <meta property="og:locale" content="{{og_locale}}">
   <meta property="og:locale:alternate" content="{{og_locale_alt}}">
+  <meta property="og:image" content="{{og_image}}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{og_image_alt}}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{og_image}}">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/css/styles.css?v={{v}}">
   <script type="application/ld+json">
@@ -134,7 +140,7 @@
     </span>
   </div>
   <h2 class="work-title">{{work_title}}</h2>
-  <ol class="work-list" data-work-list></ol>
+  <ol class="work-list" data-work-list>{{work_list_html}}</ol>
 </section>
 
 <!-- ============ ABOUT / VISION ============ -->

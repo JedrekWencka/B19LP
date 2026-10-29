@@ -14,6 +14,7 @@ Run after editing the template or the translations:
 The version number (?v=…) on CSS/JS links is bumped automatically so browsers
 pick up changes straight away.
 """
+import html
 import json
 import re
 import sys
@@ -43,6 +44,53 @@ def fix_orphans(text: str) -> str:
     return re.sub(r"\s+—", "\u00a0—", text)   # a dash never starts a line
 
 
+ROLE_LABEL = {"prod": "PROD", "rec": "REC", "mix": "MIX", "master": "MASTER"}
+PL_ORDER = "aąbcćdeęfghijklłmnńoóprsśtuvwxyzźż"
+
+
+def pl_key(text: str):
+    """Sort like the site does (Polish alphabet, case-insensitive)."""
+    return [PL_ORDER.index(ch) if ch in PL_ORDER else 100 + ord(ch) for ch in (text or "").lower()]
+
+
+def load_work() -> list:
+    """Reads site/js/work-data.js (a JS array) into Python dicts."""
+    js = (SITE / "js" / "work-data.js").read_text(encoding="utf-8")
+    js = re.sub(r"/\*.*?\*/", "", js, flags=re.S)                 # block comments
+    js = re.sub(r"(?m)^\s*//.*$", "", js)                          # whole-line // comments
+    body = js[js.index("[", js.index("B19_WORK")): js.rindex("]") + 1]
+    body = re.sub(r"(?m)^(\s*)(\w+)\s*:", r'\1"\2":', body)        # quote keys
+    body = re.sub(r",(\s*[}\]])", r"\1", body)                     # trailing commas
+    items = json.loads(body)
+    return sorted(items, key=lambda w: (pl_key(w.get("artist")), pl_key(w.get("title"))))
+
+
+def esc(t) -> str:
+    return html.escape(str(t or ""), quote=True)
+
+
+def work_list_html(items: list, s: dict) -> str:
+    out = []
+    for i, w in enumerate(items, 1):
+        artist = esc(w.get("artist"))
+        if w.get("url"):
+            artist = f'<a class="artist-link" href="{esc(w["url"])}" target="_blank" rel="noopener">{artist}</a>'
+        tags = "".join(f'<span class="tag {r}">{ROLE_LABEL.get(r, esc(r))}</span>' for r in w.get("roles", []))
+        if w.get("audio"):
+            action = f'<button class="wi-play" data-audio>{s["btn_play"]}</button>'
+        elif w.get("link"):
+            action = f'<a class="wi-play" href="{esc(w["link"])}" target="_blank" rel="noopener">{s["btn_listen_out"]}</a>'
+        else:
+            action = f'<span class="wi-play is-off">{s["btn_soon"]}</span>'
+        out.append(
+            f'\n    <li class="work-item"><span class="wi-num">{i:02d}</span>'
+            f'<span class="wi-title">{artist}<small>{esc(w.get("title"))}</small></span>'
+            f'<span class="wi-roles">{tags}</span><span class="wi-genre">{esc(w.get("genre"))}</span>'
+            f'<span class="wi-year">{esc(w.get("year"))}</span>{action}</li>'
+        )
+    return "".join(out) + "\n  "
+
+
 def lang_switch(current: str) -> str:
     parts = []
     for code, (_, url) in LANGS.items():
@@ -58,9 +106,10 @@ def main() -> int:
     template = (SRC / "index.template.html").read_text(encoding="utf-8")
     strings = json.loads((SRC / "i18n.json").read_text(encoding="utf-8"))
     version = time.strftime("%Y%m%d%H%M")
+    work = load_work()
 
     keys_in_template = set(re.findall(r"{{(\w+)}}", template))
-    auto = {"lang", "canonical", "url_en", "url_pl", "lang_switch", "v"}
+    auto = {"lang", "canonical", "url_en", "url_pl", "lang_switch", "v", "work_list_html"}
     ok = True
     for code in LANGS:
         missing = keys_in_template - auto - set(strings[code])
@@ -81,6 +130,7 @@ def main() -> int:
             url_pl=LANGS["pl"][1],
             lang_switch=lang_switch(code),
             v=version,
+            work_list_html=work_list_html(work, values),
         )
         html = re.sub(r"{{(\w+)}}", lambda m: values[m.group(1)], template)
         out.parent.mkdir(parents=True, exist_ok=True)

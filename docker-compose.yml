@@ -1,13 +1,20 @@
-# B19 landing page — served by nginx on port 8080
-# (ports 80/443 belong to the band site, ww-landing)
+# B19 landing page — nginx serving ./site
+# No public port: the band site's nginx (ww-landing, ports 80/443) proxies
+# b19studio.net to this container over the shared Docker network below.
 services:
   b19-landing:
     image: nginx:1.27-alpine
     container_name: b19-landing
     restart: unless-stopped
-    ports:
-      - "8080:80"
     volumes:
       - ./site:/usr/share/nginx/html:ro
       # mount the folder (not the single file) so git pull updates are seen by nginx
       - ./deploy/nginx:/etc/nginx/conf.d:ro
+    networks:
+      - default
+      - web
+
+networks:
+  web:
+    external: true
+    name: ${WW_NETWORK:-ww_landing_default}

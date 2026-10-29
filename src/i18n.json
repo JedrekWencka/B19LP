@@ -40,7 +40,13 @@
     "cal_rgb": "RED — BLUE — GREEN",
     "address": "63-100 NOCHOWO, POLAND",
     "q_mp3_title": "MP3 320 kbps — fast start",
-    "q_flac_title": "FLAC 24-bit — lossless"
+    "q_flac_title": "FLAC 24-bit — lossless",
+    "og_image": "https://b19studio.net/assets/og-image.png",
+    "og_image_alt": "B19 — Jędrzej Wencka: recording, mixing, mastering, reamping",
+    "btn_play": "▶ PLAY",
+    "btn_listen": "▶ LISTEN",
+    "btn_listen_out": "LISTEN ↗",
+    "btn_soon": "SOON"
   },
   "pl": {
     "meta_title": "B19 — Jędrzej Wencka · Nagrania, miks i mastering",
@@ -83,6 +89,12 @@
     "cal_rgb": "CZERWONY — NIEBIESKI — ZIELONY",
     "address": "63-100 NOCHOWO, POLSKA",
     "q_mp3_title": "MP3 320 kbps — szybki start",
-    "q_flac_title": "FLAC 24-bit — bezstratnie"
+    "q_flac_title": "FLAC 24-bit — bezstratnie",
+    "og_image": "https://b19studio.net/assets/og-image-pl.png",
+    "og_image_alt": "B19 — Jędrzej Wencka: nagrania, miks, mastering, reamping",
+    "btn_play": "▶ ODTWÓRZ",
+    "btn_listen": "▶ POSŁUCHAJ",
+    "btn_listen_out": "POSŁUCHAJ ↗",
+    "btn_soon": "WKRÓTCE"
   }
 }

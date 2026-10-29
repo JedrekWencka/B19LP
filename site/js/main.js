@@ -519,6 +519,7 @@
     // always shown A–Z: band name, then song title (Polish letters sorted correctly)
     const byName = (a, b) => (a || "").localeCompare(b || "", "pl", { sensitivity: "base" });
     const data = [...(window.B19_WORK || [])].sort((a, b) => byName(a.artist, b.artist) || byName(a.title, b.title));
+    list.replaceChildren();   // the page ships a static copy for search engines; rebuild it with players
     if (!data.length) list.innerHTML = `<li class="work-empty">${t.empty}</li>`;
     data.forEach((item, idx) => {
       const li = document.createElement("li");

@@ -12,7 +12,7 @@ site/
   js/work-data.js   # ← portfolio list, edit this to add your work
   assets/
 docker-compose.yml  # nginx container on port 8080
-deploy/nginx.conf
+deploy/nginx/default.conf
 deploy/update.sh    # pull + restart, run on the server
 ```
 

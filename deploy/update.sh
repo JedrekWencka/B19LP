@@ -4,5 +4,6 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 git pull --ff-only
 docker compose up -d
+docker compose exec -T b19-landing nginx -t
 docker compose exec -T b19-landing nginx -s reload
 docker compose ps

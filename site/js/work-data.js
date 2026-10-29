@@ -35,7 +35,7 @@ window.B19_WORK = [
     url: "https://impalacore.bandcamp.com/album/25",
     title: "Miło Było",
     roles: ["prod", "rec", "mix", "master"],
-    genre: "Metalcore",
+    genre: "Post-hardcore / Metalcore",
     year: 2025,
     audio: "impala-bejsment"
   },

@@ -27,7 +27,7 @@ window.B19_WORK = [
     title: "Gold Formula",
     roles: ["prod", "rec", "mix", "master"],
     genre: "Stoner rock",
-    year: "",
+    year: 2019,
     audio: "whitewater-gold-formula"
   },
   {
@@ -61,7 +61,7 @@ window.B19_WORK = [
     artist: "Camping Hill",
     title: "Brudne Serca",
     roles: ["prod", "rec", "mix", "master"],
-    genre: "",
+    genre: "Alternative rock",
     year: 2025,
     // no master file yet → plays the YouTube video in the page
     link: "https://www.youtube.com/watch?v=c2w_vgFjx_o"

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B19 — Jędrzej Wencka · Recording, Mixing & Mastering</title>
+  <meta name="description" content="B19 — recording, mixing and mastering by Jędrzej Wencka. Big guitars, heavy drums, modern clarity, organic soul.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header" id="top">
+  <a class="logo mono" href="#top">B19 <span aria-hidden="true">©</span></a>
+  <nav class="nav mono" aria-label="Main">
+    <a href="#top" class="is-active">HOME</a>
+    <a href="#work">WORK</a>
+    <a href="#services">SERVICES</a>
+    <a href="#contact">CONTACT</a>
+  </nav>
+  <div class="header-right">
+    <p class="tagline mono">YOU TELL THE STORY, WE SET THE TONE<br><span>© SINCE 2006</span></p>
+    <div class="social">
+      <a href="#" data-social="instagram" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></a>
+      <a href="#" data-social="youtube" aria-label="YouTube"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor"/><path d="M10 9v6l5-3z" fill="#000"/></svg></a>
+    </div>
+  </div>
+  <button class="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+
+<div class="mobile-menu mono" hidden>
+  <a href="#top">HOME</a><a href="#work">WORK</a><a href="#services">SERVICES</a><a href="#contact">CONTACT</a>
+</div>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-title">
+    <p class="hero-name">JĘDRZEJ WENCKA</p>
+    <h1 class="hero-b19" data-glitch="B19">B19</h1>
+  </div>
+  <div class="bars-wrap">
+    <canvas class="bars" aria-hidden="true"></canvas>
+    <div class="standby"><span>PLEASE STAND BY</span></div>
+  </div>
+  <div class="transport mono">
+    <span>INTRO</span>
+    <button class="tp-btn" aria-label="Pause animation" data-pause>❚❚</button>
+    <span class="rec-dot" aria-hidden="true"></span>
+    <span class="timecode" data-timecode>00:00:00</span>
+  </div>
+</section>
+
+<!-- ============ STATEMENT ============ -->
+<section class="statement">
+  <p class="mono" data-typeout>BIG GUITARS, HEAVY DRUMS, MODERN CLARITY, ORGANIC SOUL, NO AI, ZERO BULLSHIT.</p>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="services" id="services">
+  <div class="section-bar mono">
+    <span>SERVICES <i class="tri up"></i><i class="tri down"></i></span>
+    <span>(0,1,255)</span>
+  </div>
+  <div class="services-grid">
+    <article class="service">
+      <canvas class="viz viz-noise" aria-hidden="true"></canvas>
+      <h3>MIX &amp; MASTERING</h3>
+      <p>I focus on clean, punchy mixes that keep the energy and character of the performance intact — modern where it matters, raw where it should be.</p>
+    </article>
+    <article class="service">
+      <canvas class="viz viz-dots" aria-hidden="true"></canvas>
+      <h3>LIVE SOUND</h3>
+      <p>From time to time I also do live sound when the right show comes along. It’s more of a side job and a passion than my main business. I simply enjoy making bands sound good on stage as much as in the studio.</p>
+    </article>
+    <article class="service">
+      <canvas class="viz viz-arch" aria-hidden="true"></canvas>
+      <h3>REAMPING</h3>
+      <p>A growing collection of old and new amps, cabinets, microphones and preamps gives plenty of options for finding the right guitar tone. From familiar classics to more unusual combinations. Always with character and high-quality results.</p>
+    </article>
+  </div>
+  <div class="coords mono" aria-hidden="true">
+    <span>X:<b data-x>648</b></span><span>Y:<b data-y>157</b></span><span>Z:0</span>
+    <svg class="crosshair" viewBox="0 0 40 40"><path d="M2 12V2h10M28 2h10v10M38 28v10H28M12 38H2V28M20 13v14M13 20h14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+  </div>
+</section>
+
+<!-- ============ WORK / PORTFOLIO ============ -->
+<section class="work" id="work">
+  <div class="section-bar mono">
+    <span>WORK <i class="tri right"></i></span>
+    <span class="work-filters" role="tablist">
+      <button class="is-active" data-filter="all">ALL</button>
+      <button data-filter="rec">REC</button>
+      <button data-filter="mix">MIX</button>
+      <button data-filter="master">MASTER</button>
+    </span>
+  </div>
+  <h2 class="work-title">SELECTED WORK</h2>
+  <ol class="work-list" data-work-list></ol>
+  <div class="player" data-player hidden>
+    <div class="player-bar mono"><span data-player-title>NOW PLAYING</span><button data-player-close aria-label="Close player">✕</button></div>
+    <div class="player-embed" data-player-embed></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT / VISION ============ -->
+<section class="about" id="about">
+  <div class="about-left">
+    <div class="about-bar mono">
+      <div><span>ABOUT <i class="tri right"></i></span><span>SNOW BLK</span></div>
+      <div><span data-timecode>00:00:00</span></div>
+      <div class="r"><span>LIFE IS A</span><span>GLITCH</span></div>
+    </div>
+    <h2>Vision</h2>
+    <p>My goal is simple: to get the best possible sound out of every project without turning great production into an unnecessary luxury. I want the band, the songs and the performances to come through at their strongest, keeping their character intact while giving them the clarity, weight and polish they deserve. No chasing trends for the sake of it, no overproduction. Just making sure the music reaches the listener in the best possible way.</p>
+  </div>
+  <div class="about-right">
+    <canvas class="viz-disc" aria-hidden="true"></canvas>
+  </div>
+</section>
+
+<!-- ============ CALIBRATION MARQUEE ============ -->
+<section class="calibration" aria-label="Screen calibration">
+  <div class="cal-row cal-red"><div class="cal-track">
+    <span>SCREEN</span><i class="pill pill-rainbow"></i><span>CALIBRATION</span><i class="pill pill-rainbow"></i>
+    <span>SCREEN</span><i class="pill pill-rainbow"></i><span>CALIBRATION</span><i class="pill pill-rainbow"></i>
+  </div></div>
+  <div class="cal-row cal-blue"><div class="cal-track reverse">
+    <span>RED — BLUE — GREEN</span><i class="pill pill-noise"></i>
+    <span>RED — BLUE — GREEN</span><i class="pill pill-noise"></i>
+    <span>RED — BLUE — GREEN</span><i class="pill pill-noise"></i>
+  </div></div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="section-bar mono dark"><span>CONTACT <i class="tri up"></i></span></div>
+  <div class="contact-body">
+    <svg class="glyph" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="#000">
+        <path d="M14 8l84 84-9 9L5 17z"/>
+        <path d="M96 14l9 9-9 9-9-9z"/><path d="M96 38l9 9-9 9-9-9z"/><path d="M96 62l9 9-9 9-9-9z"/>
+        <path d="M14 96l9 9-9 9-9-9z"/><path d="M38 96l9 9-9 9-9-9z"/><path d="M62 96l9 9-9 9-9-9z"/>
+      </g>
+    </svg>
+    <ul class="contact-list">
+      <li><a href="mailto:jedrzej.wencka@gmail.com">jedrzej.wencka@gmail.com</a></li>
+      <li><a href="tel:+48725031650">+48 725 031 650</a></li>
+      <li>63-100 NOCHOWO, POLAND</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer mono">
+  <nav aria-label="Footer">
+    <a href="#top" class="is-active">HOME</a><a href="#work">WORK</a><a href="#services">SERVICES</a><a href="#contact">CONTACT</a>
+  </nav>
+  <div class="footer-mid"><span>© <span data-year></span> B19 · JĘDRZEJ WENCKA</span></div>
+  <div class="footer-right">
+    <a href="#" data-social="instagram">INSTAGRAM</a>
+    <a href="#" data-social="youtube">YOUTUBE</a>
+  </div>
+</footer>
+
+<script src="js/work-data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

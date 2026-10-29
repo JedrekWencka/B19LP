@@ -1,0 +1,12 @@
+# B19 landing page — served by nginx on port 8080
+# (ports 80/443 belong to the band site, ww-landing)
+services:
+  b19-landing:
+    image: nginx:1.27-alpine
+    container_name: b19-landing
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro

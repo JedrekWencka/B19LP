@@ -97,17 +97,19 @@ def gallery_html(lang: str, s: dict):
     for i, g in enumerate(data, 1):
         alt = esc(g.get(f"alt_{lang}") or g.get("alt_en"))
         f = esc(g["file"])
-        big = ' class="is-big"' if i == 1 else ""
-        sizes = "(max-width: 700px) 100vw, 66vw" if i == 1 else "(max-width: 700px) 100vw, 33vw"
+        shape = g.get("shape", "")
+        cls = f' class="is-{shape}"' if shape else ""
+        w, h = g.get("width", 900), g.get("height", 601)
+        full_w = g.get("full_width", 1800)
+        sizes = "(max-width: 700px) 100vw, 66vw" if shape in ("big", "wide") else "(max-width: 700px) 50vw, 33vw"
         out.append(
-            f'\n    <li{big}><button class="g-item" data-full="/assets/studio/{f}-1800.webp" data-index="{i-1}" '
+            f'\n    <li{cls}><button class="g-item" data-full="/assets/studio/{f}-1800.webp" data-index="{i-1}" '
             f'aria-label="{esc(s["aria_open_photo"])}: {alt}">'
-            f'<img src="/assets/studio/{f}-900.webp" srcset="/assets/studio/{f}-900.webp 900w, /assets/studio/{f}-1800.webp 1800w" '
-            f'sizes="{sizes}" alt="{alt}" loading="lazy" decoding="async" width="900" height="601">'
+            f'<img src="/assets/studio/{f}-900.webp" srcset="/assets/studio/{f}-900.webp {w}w, /assets/studio/{f}-1800.webp {full_w}w" '
+            f'sizes="{sizes}" alt="{alt}" loading="lazy" decoding="async" width="{w}" height="{h}">'
             f'<span class="g-label mono" aria-hidden="true">CAM {i:02d}</span></button></li>'
         )
     return "".join(out) + "\n  ", len(data)
-
 
 def lang_switch(current: str) -> str:
     parts = []

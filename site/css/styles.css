@@ -421,16 +421,22 @@ html[lang="pl"] .standby span { white-space: normal; text-align: center; }
 .rec-dot.live { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); border: 0; margin-right: 6px; vertical-align: 1px; animation: blink 1.2s steps(1) infinite; }
 .gallery-grid {
   list-style: none; margin: 0; padding: 0 var(--gutter);
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
 }
 .gallery-grid li { margin: 0; }
+.gallery-grid { grid-auto-flow: dense; }
 .gallery-grid li.is-big { grid-column: span 2; grid-row: span 2; }
+.gallery-grid li.is-tall { grid-row: span 2; }
+.gallery-grid li.is-wide { grid-column: span 2; }
 .g-item {
   position: relative; display: block; width: 100%; height: 100%;
   aspect-ratio: 3 / 2; overflow: hidden; background: #111; cursor: zoom-in;
 }
-.gallery-grid li.is-big .g-item { aspect-ratio: auto; }
+/* big tile sets the height of its two rows; tall/wide tiles stretch to fill their cells */
+.gallery-grid li.is-tall .g-item,
+.gallery-grid li.is-wide .g-item { aspect-ratio: auto; min-height: 100%; }
 .g-item img {
+  position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover; display: block;
   filter: grayscale(1) contrast(1.05);
   transition: transform .5s ease, filter .3s ease;
@@ -482,9 +488,11 @@ html[lang="pl"] .standby span { white-space: normal; text-align: center; }
 .lb-nav:hover { border-color: var(--green); color: var(--green); }
 .lb-prev { left: 12px; } .lb-next { right: 12px; }
 @media (max-width: 700px) {
-  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
   .gallery-grid li.is-big { grid-column: span 2; grid-row: auto; }
   .gallery-grid li.is-big .g-item { aspect-ratio: 3 / 2; }
+  .gallery-grid li.is-wide { grid-column: auto; }
+  .gallery-grid li.is-wide .g-item { aspect-ratio: 3 / 2; }
   .lb-figure { padding: 0 8px 20px; }
   .lb-nav { top: auto; bottom: 14px; transform: none; }
   .g-label { font-size: 9px; left: 10px; bottom: 8px; }

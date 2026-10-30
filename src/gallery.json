@@ -1,10 +1,20 @@
 {
-  "_comment": "Studio gallery. Images live in site/assets/studio/<file>-900.webp and <file>-1800.webp. First item is shown large.",
+  "_comment": "Studio gallery. Images: site/assets/studio/<file>-900.webp (grid) and <file>-1800.webp (viewer). shape: big (2x2), tall (1x2, portrait photos), wide (2x1) or omit for a normal tile. Order = order on the page.",
   "items": [
     {
       "file": "studio-01",
       "alt_en": "Drummer at the kit in the B19 live room, surrounded by microphones",
-      "alt_pl": "Perkusista przy zestawie w sali nagrań B19, otoczony mikrofonami"
+      "alt_pl": "Perkusista przy zestawie w sali nagrań B19, otoczony mikrofonami",
+      "shape": "big"
+    },
+    {
+      "file": "studio-10",
+      "alt_en": "Ludwig drum kit with microphones set up in the live room",
+      "alt_pl": "Zestaw perkusyjny Ludwig z mikrofonami w sali nagrań",
+      "shape": "tall",
+      "width": 600,
+      "height": 818,
+      "full_width": 920
     },
     {
       "file": "studio-02",
@@ -44,7 +54,8 @@
     {
       "file": "studio-09",
       "alt_en": "Close-up of guitar pedals: Boss Delay, ZVEX Box of Rock, Ibanez",
-      "alt_pl": "Zbliżenie efektów gitarowych: Boss Delay, ZVEX Box of Rock, Ibanez"
+      "alt_pl": "Zbliżenie efektów gitarowych: Boss Delay, ZVEX Box of Rock, Ibanez",
+      "shape": "wide"
     }
   ]
 }

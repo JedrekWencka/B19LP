@@ -56,6 +56,56 @@
       "alt_en": "Close-up of guitar pedals: Boss Delay, ZVEX Box of Rock, Ibanez",
       "alt_pl": "Zbliżenie efektów gitarowych: Boss Delay, ZVEX Box of Rock, Ibanez",
       "shape": "wide"
+    },
+    {
+      "file": "studio-11",
+      "alt_en": "Amp wall: Orange, Ampeg, Marshall and Friedman heads on cabinets, miked up",
+      "alt_pl": "Ściana wzmacniaczy: głowy Orange, Ampeg, Marshall i Friedman na kolumnach, z mikrofonami",
+      "shape": "big",
+      "width": 900,
+      "height": 901,
+      "full_width": 1298
+    },
+    {
+      "file": "studio-12",
+      "alt_en": "Hiwatt Hi-Gain 100 on top of an Ampeg V-4, guitarist dialing in a tone",
+      "alt_pl": "Hiwatt Hi-Gain 100 na Ampegu V-4, gitarzysta ustawia brzmienie",
+      "width": 900,
+      "height": 900,
+      "full_width": 1304
+    },
+    {
+      "file": "studio-13",
+      "alt_en": "Marshall heads and a pile of guitar pedals on the rug",
+      "alt_pl": "Głowy Marshall i stos efektów gitarowych na dywanie",
+      "width": 900,
+      "height": 908,
+      "full_width": 1294
+    },
+    {
+      "file": "studio-14",
+      "alt_en": "Les Paul, Arturia MicroBrute synth and a laptop during a session",
+      "alt_pl": "Les Paul, syntezator Arturia MicroBrute i laptop podczas sesji",
+      "width": 900,
+      "height": 899,
+      "full_width": 1306
+    },
+    {
+      "file": "studio-15",
+      "alt_en": "Pedalboard with a Moen GEC9 switcher, DigiTech Whammy and Small Stone",
+      "alt_pl": "Pedalboard z przełącznikiem Moen GEC9, DigiTech Whammy i Small Stone",
+      "shape": "big",
+      "width": 900,
+      "height": 625,
+      "full_width": 1314
+    },
+    {
+      "file": "studio-16",
+      "alt_en": "Echobrain, T-Rex Diva and DOD Overdrive Plus pedals on the wooden floor",
+      "alt_pl": "Efekty Echobrain, T-Rex Diva i DOD Overdrive Plus na drewnianej podłodze",
+      "width": 900,
+      "height": 1065,
+      "full_width": 1036
     }
   ]
 }

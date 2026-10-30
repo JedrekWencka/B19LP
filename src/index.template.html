@@ -50,6 +50,7 @@
   <nav class="nav mono" aria-label="{{aria_main_nav}}">
     <a href="#top" class="is-active">{{nav_home}}</a>
     <a href="#work">{{nav_work}}</a>
+    <a href="#studio">{{nav_studio}}</a>
     <a href="#services">{{nav_services}}</a>
     <a href="#contact">{{nav_contact}}</a>
   </nav>
@@ -70,7 +71,7 @@
 </header>
 
 <div class="mobile-menu mono" hidden>
-  <a href="#top">{{nav_home}}</a><a href="#work">{{nav_work}}</a><a href="#services">{{nav_services}}</a><a href="#contact">{{nav_contact}}</a><div class="social mm-social" data-mm-social></div>
+  <a href="#top">{{nav_home}}</a><a href="#work">{{nav_work}}</a><a href="#studio">{{nav_studio}}</a><a href="#services">{{nav_services}}</a><a href="#contact">{{nav_contact}}</a><div class="social mm-social" data-mm-social></div>
 </div>
 
 <main>
@@ -143,6 +144,24 @@
   <ol class="work-list" data-work-list>{{work_list_html}}</ol>
 </section>
 
+<!-- ============ STUDIO GALLERY ============ -->
+<section class="gallery" id="studio" aria-label="{{aria_gallery}}">
+  <div class="section-bar mono">
+    <span>{{nav_studio}} <i class="tri right"></i></span>
+    <span><i class="rec-dot live" aria-hidden="true"></i> {{gallery_count}} {{gallery_frames}}</span>
+  </div>
+  <h2 class="gallery-title">{{gallery_title}}</h2>
+  <ul class="gallery-grid">{{gallery_html}}</ul>
+</section>
+
+<!-- photo viewer -->
+<dialog class="lightbox" data-lightbox aria-label="{{aria_gallery}}">
+  <div class="lb-bar mono"><span data-lb-count>01 / 09</span><button class="lb-close" data-lb-close aria-label="{{aria_close}}">✕</button></div>
+  <figure class="lb-figure"><img data-lb-img alt=""><figcaption class="mono" data-lb-cap></figcaption></figure>
+  <button class="lb-nav lb-prev mono" data-lb-prev aria-label="{{aria_prev}}">◀</button>
+  <button class="lb-nav lb-next mono" data-lb-next aria-label="{{aria_next}}">▶</button>
+</dialog>
+
 <!-- ============ ABOUT / VISION ============ -->
 <section class="about" id="about">
   <div class="about-left">
@@ -212,7 +231,7 @@
 <!-- ============ FOOTER ============ -->
 <footer class="footer mono">
   <nav aria-label="{{aria_footer_nav}}">
-    <a href="#top" class="is-active">{{nav_home}}</a><a href="#work">{{nav_work}}</a><a href="#services">{{nav_services}}</a><a href="#contact">{{nav_contact}}</a>
+    <a href="#top" class="is-active">{{nav_home}}</a><a href="#work">{{nav_work}}</a><a href="#studio">{{nav_studio}}</a><a href="#services">{{nav_services}}</a><a href="#contact">{{nav_contact}}</a>
   </nav>
   <div class="footer-mid"><span>© <span data-year></span> B19 · JĘDRZEJ WENCKA</span><span class="footer-lang">{{lang_switch}}</span></div>
   <div class="footer-right">

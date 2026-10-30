@@ -46,7 +46,15 @@
     "btn_play": "▶ PLAY",
     "btn_listen": "▶ LISTEN",
     "btn_listen_out": "LISTEN ↗",
-    "btn_soon": "SOON"
+    "btn_soon": "SOON",
+    "nav_studio": "STUDIO",
+    "gallery_title": "INSIDE B19",
+    "gallery_frames": "FRAMES",
+    "aria_gallery": "Studio photos",
+    "aria_open_photo": "Open photo",
+    "aria_prev": "Previous photo",
+    "aria_next": "Next photo",
+    "aria_close": "Close"
   },
   "pl": {
     "meta_title": "B19 — Jędrzej Wencka · Nagrania, miks i mastering",
@@ -95,6 +103,14 @@
     "btn_play": "▶ ODTWÓRZ",
     "btn_listen": "▶ POSŁUCHAJ",
     "btn_listen_out": "POSŁUCHAJ ↗",
-    "btn_soon": "WKRÓTCE"
+    "btn_soon": "WKRÓTCE",
+    "nav_studio": "STUDIO",
+    "gallery_title": "W STUDIU B19",
+    "gallery_frames": "KADRÓW",
+    "aria_gallery": "Zdjęcia studia",
+    "aria_open_photo": "Otwórz zdjęcie",
+    "aria_prev": "Poprzednie zdjęcie",
+    "aria_next": "Następne zdjęcie",
+    "aria_close": "Zamknij"
   }
 }

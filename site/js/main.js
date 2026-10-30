@@ -504,7 +504,7 @@
     deckWave.addEventListener("pointerup", () => (dragging = false));
   }
   document.addEventListener("keydown", e => {
-    if (!current || e.code !== "Space" || /INPUT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) return;
+    if (!current || e.code !== "Space" || document.querySelector("dialog[open]") || /INPUT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) return;
     e.preventDefault();
     audio.paused ? audio.play() : audio.pause();
   });
@@ -605,6 +605,48 @@
   $$(".work-filters button").forEach(b => b.addEventListener("click", closeEmbed));
 
   /* =======================================================
+     STUDIO GALLERY — viewer + hover glitch
+     ======================================================= */
+  const gItems = $$(".g-item");
+  const lb = $("[data-lightbox]");
+  if (gItems.length && lb) {
+    const img = $("[data-lb-img]", lb), cap = $("[data-lb-cap]", lb), cnt = $("[data-lb-count]", lb);
+    let idx = 0;
+    const show = i => {
+      idx = (i + gItems.length) % gItems.length;
+      const b = gItems[idx], thumb = b.querySelector("img");
+      img.src = b.dataset.full;
+      img.alt = thumb.alt;
+      cap.textContent = thumb.alt;
+      cnt.textContent = `${pad(idx + 1)} / ${pad(gItems.length)}`;
+      // preload neighbours
+      [idx + 1, idx - 1].forEach(n => { const nb = gItems[(n + gItems.length) % gItems.length]; new Image().src = nb.dataset.full; });
+    };
+    gItems.forEach((b, i) => {
+      b.addEventListener("click", () => { show(i); lb.showModal(); document.body.style.overflow = "hidden"; });
+      if (!reduceMotion) b.addEventListener("mouseenter", () => {
+        b.classList.remove("glitch"); void b.offsetWidth; b.classList.add("glitch");
+      });
+    });
+    $("[data-lb-prev]", lb).addEventListener("click", () => show(idx - 1));
+    $("[data-lb-next]", lb).addEventListener("click", () => show(idx + 1));
+    $("[data-lb-close]", lb).addEventListener("click", () => lb.close());
+    lb.addEventListener("close", () => { document.body.style.overflow = ""; gItems[idx].focus({ preventScroll: true }); });
+    lb.addEventListener("click", e => { if (e.target === lb || e.target.classList.contains("lb-figure")) lb.close(); });
+    lb.addEventListener("keydown", e => {
+      if (e.key === "ArrowRight") show(idx + 1);
+      if (e.key === "ArrowLeft") show(idx - 1);
+    });
+    let x0 = null;
+    lb.addEventListener("touchstart", e => (x0 = e.touches[0].clientX), { passive: true });
+    lb.addEventListener("touchend", e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+    });
+  }
+
+  /* =======================================================
      8. NAV: mobile menu + active section
      ======================================================= */
   const burger = $(".burger"), menu = $(".mobile-menu");
@@ -616,7 +658,7 @@
   // phone menu reuses the header's social icons
   const mmSocial = $("[data-mm-social]"), headSocial = $(".header .social");
   if (mmSocial && headSocial) mmSocial.innerHTML = headSocial.innerHTML;
-  const sections = ["work", "services", "contact"].map(id => document.getElementById(id)).filter(Boolean);
+  const sections = ["work", "studio", "services", "contact"].map(id => document.getElementById(id)).filter(Boolean);
   const navLinks = $$(".nav a, .footer nav a");
   const onScroll = () => {
     let current = "top";
@@ -637,7 +679,7 @@
 
   // language switch keeps you in the same section (e.g. /pl/#work)
   $$("[data-lang-link]").forEach(a => a.addEventListener("click", () => {
-    const sec = ["contact", "work", "services"].find(id => {
+    const sec = ["contact", "studio", "work", "services"].find(id => {
       const el = document.getElementById(id);
       return el && el.getBoundingClientRect().top < window.innerHeight * 0.4;
     });

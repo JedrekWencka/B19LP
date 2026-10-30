@@ -91,6 +91,24 @@ def work_list_html(items: list, s: dict) -> str:
     return "".join(out) + "\n  "
 
 
+def gallery_html(lang: str, s: dict):
+    data = json.loads((SRC / "gallery.json").read_text(encoding="utf-8"))["items"]
+    out = []
+    for i, g in enumerate(data, 1):
+        alt = esc(g.get(f"alt_{lang}") or g.get("alt_en"))
+        f = esc(g["file"])
+        big = ' class="is-big"' if i == 1 else ""
+        sizes = "(max-width: 700px) 100vw, 66vw" if i == 1 else "(max-width: 700px) 100vw, 33vw"
+        out.append(
+            f'\n    <li{big}><button class="g-item" data-full="/assets/studio/{f}-1800.webp" data-index="{i-1}" '
+            f'aria-label="{esc(s["aria_open_photo"])}: {alt}">'
+            f'<img src="/assets/studio/{f}-900.webp" srcset="/assets/studio/{f}-900.webp 900w, /assets/studio/{f}-1800.webp 1800w" '
+            f'sizes="{sizes}" alt="{alt}" loading="lazy" decoding="async" width="900" height="601">'
+            f'<span class="g-label mono" aria-hidden="true">CAM {i:02d}</span></button></li>'
+        )
+    return "".join(out) + "\n  ", len(data)
+
+
 def lang_switch(current: str) -> str:
     parts = []
     for code, (_, url) in LANGS.items():
@@ -109,7 +127,7 @@ def main() -> int:
     work = load_work()
 
     keys_in_template = set(re.findall(r"{{(\w+)}}", template))
-    auto = {"lang", "canonical", "url_en", "url_pl", "lang_switch", "v", "work_list_html"}
+    auto = {"lang", "canonical", "url_en", "url_pl", "lang_switch", "v", "work_list_html", "gallery_html", "gallery_count"}
     ok = True
     for code in LANGS:
         missing = keys_in_template - auto - set(strings[code])
@@ -132,6 +150,8 @@ def main() -> int:
             v=version,
             work_list_html=work_list_html(work, values),
         )
+        gh, gn = gallery_html(code, values)
+        values.update(gallery_html=gh, gallery_count=f"{gn:02d}")
         html = re.sub(r"{{(\w+)}}", lambda m: values[m.group(1)], template)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html, encoding="utf-8")

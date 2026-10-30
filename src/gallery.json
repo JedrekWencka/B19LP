@@ -1,0 +1,50 @@
+{
+  "_comment": "Studio gallery. Images live in site/assets/studio/<file>-900.webp and <file>-1800.webp. First item is shown large.",
+  "items": [
+    {
+      "file": "studio-01",
+      "alt_en": "Drummer at the kit in the B19 live room, surrounded by microphones",
+      "alt_pl": "Perkusista przy zestawie w sali nagrań B19, otoczony mikrofonami"
+    },
+    {
+      "file": "studio-02",
+      "alt_en": "Mixing console and monitors in the B19 control room",
+      "alt_pl": "Konsola mikserska i monitory w reżyserce B19"
+    },
+    {
+      "file": "studio-03",
+      "alt_en": "Guitarist with a single-cut guitar in front of a Marshall amp",
+      "alt_pl": "Gitarzysta z gitarą single-cut przed wzmacniaczem Marshall"
+    },
+    {
+      "file": "studio-04",
+      "alt_en": "Marshall amp head and headphones by the brick wall",
+      "alt_pl": "Głowa Marshall i słuchawki przy ceglanej ścianie"
+    },
+    {
+      "file": "studio-05",
+      "alt_en": "Guitar pedalboard on the studio floor during a session",
+      "alt_pl": "Pedalboard gitarowy na podłodze studia podczas sesji"
+    },
+    {
+      "file": "studio-06",
+      "alt_en": "Drum recording session seen past a crash cymbal",
+      "alt_pl": "Nagranie perkusji widziane zza talerza crash"
+    },
+    {
+      "file": "studio-07",
+      "alt_en": "Editing a session in the DAW in the control room",
+      "alt_pl": "Edycja sesji w DAW w reżyserce"
+    },
+    {
+      "file": "studio-08",
+      "alt_en": "Drummer recording with headphones in the live room",
+      "alt_pl": "Perkusista nagrywa w słuchawkach w sali nagrań"
+    },
+    {
+      "file": "studio-09",
+      "alt_en": "Close-up of guitar pedals: Boss Delay, ZVEX Box of Rock, Ibanez",
+      "alt_pl": "Zbliżenie efektów gitarowych: Boss Delay, ZVEX Box of Rock, Ibanez"
+    }
+  ]
+}

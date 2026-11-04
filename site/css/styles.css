@@ -579,3 +579,28 @@ html[lang="pl"] .standby span { white-space: normal; text-align: center; }
 body.deck-open .consent { bottom: calc(var(--gutter) + 80px); }
 .footer-cookies { font-size: 11px; color: #777; letter-spacing: .1em; }
 .footer-cookies:hover { color: var(--green); }
+
+/* ============ PRIVACY POLICY PAGE ============ */
+.consent-text a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; text-transform: none; }
+.footer-legal { display: inline-flex; gap: 16px; }
+.legal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px var(--gutter); border-bottom: 1px solid #222;
+}
+.legal { max-width: 760px; margin: 0 auto; padding: 48px var(--gutter) 80px; }
+.legal-back { display: inline-block; font-size: 11px; letter-spacing: .12em; color: #777; margin-bottom: 36px; }
+.legal-back:hover { color: var(--green); }
+.legal h1 { font-size: clamp(26px, 5vw, 44px); letter-spacing: .06em; line-height: 1.1; margin: 0 0 12px; color: var(--green); }
+.legal .legal-updated { font-size: 11px; letter-spacing: .1em; color: #777; margin: 0 0 36px; }
+.legal .legal-intro { font-size: 18px; line-height: 1.6; margin: 0 0 40px; padding: 18px 20px; border-left: 2px solid var(--green); background: #0b0b0b; }
+.legal section { margin: 0 0 36px; }
+.legal h2 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #fff; margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid #222; }
+.legal p, .legal li { font-size: 15px; line-height: 1.7; color: #ccc; }
+.legal p { margin: 0 0 12px; }
+.legal ul { margin: 0 0 12px; padding-left: 20px; }
+.legal li { margin-bottom: 4px; }
+.legal b { color: #fff; }
+.legal a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; word-break: break-word; }
+.legal code { font-family: var(--mono); font-size: 13px; color: #fff; background: #151515; padding: 1px 5px; }
+.legal .legal-cookies { margin-top: 48px; font-size: 12px; letter-spacing: .12em; }
+.legal-footer { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-top: 1px solid #222; }

@@ -7,6 +7,9 @@ Builds the site pages from one template + translations.
         -> site/pl/index.html   (Polish)             https://b19studio.net/pl/
         -> site/sitemap.xml, site/robots.txt
 
+    src/privacy.template.html  +  src/privacy.json
+        -> site/privacy/index.html, site/pl/prywatnosc/index.html
+
 Run after editing the template or the translations:
 
     python3 tools/build.py
@@ -159,6 +162,8 @@ def main() -> int:
         out.write_text(html, encoding="utf-8")
         print(f"wrote {out.relative_to(ROOT)}  ({url})")
 
+    build_privacy(strings, version)
+
     today = time.strftime("%Y-%m-%d")
     alts = "".join(
         f'\n    <xhtml:link rel="alternate" hreflang="{c}" href="{u}"/>' for c, (_, u) in LANGS.items()
@@ -175,6 +180,48 @@ def main() -> int:
     (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n", encoding="utf-8")
     print("wrote site/sitemap.xml, site/robots.txt")
     return 0
+
+
+def fix_orphans_html(markup: str) -> str:
+    """fix_orphans for text only, leaving tags (e.g. <a href>) untouched."""
+    return "".join(part if part.startswith("<") else fix_orphans(part) for part in re.split(r"(<[^>]+>)", markup))
+
+
+def build_privacy(strings: dict, version: str) -> None:
+    """src/privacy.template.html + src/privacy.json -> site/privacy/ and site/pl/prywatnosc/"""
+    template = (SRC / "privacy.template.html").read_text(encoding="utf-8")
+    data = json.loads((SRC / "privacy.json").read_text(encoding="utf-8"))
+    paths = {code: data[code]["path"] for code in LANGS}
+    for code in LANGS:
+        d = data[code]
+        sections = "".join(
+            f'\n  <section>\n    <h2 class="mono">{esc(sec["h"])}</h2>\n    {sec["html"]}\n  </section>' for sec in d["sections"]
+        )
+        intro = d["intro"]
+        if code == "pl":
+            sections, intro = fix_orphans_html(sections), fix_orphans_html(intro)
+        switch = '<span class="sep">/</span>'.join(
+            f'<a href="{paths[c]}" hreflang="{c}" lang="{c}"' + (' class="is-active" aria-current="true"' if c == code else "") + f">{c.upper()}</a>"
+            for c in LANGS
+        )
+        s = strings[code]
+        values = {
+            "lang": code, "title": esc(d["title"]), "description": esc(d["description"]),
+            "canonical": BASE + d["path"], "url_en": BASE + paths["en"], "url_pl": BASE + paths["pl"],
+            "v": version, "home": "/" if code == "en" else f"/{code}/",
+            "heading": esc(d["heading"]), "updated_label": esc(d["updated_label"]), "updated": data["updated"],
+            "back": esc(d["back"]), "intro": intro, "sections_html": sections, "lang_switch": switch,
+            "aria_language": s["aria_language"], "cookie_link": s["cookie_link"], "cookie_aria": s["cookie_aria"],
+            "cookie_head": s["cookie_head"], "cookie_text": s["cookie_text"], "cookie_more": s["cookie_more"],
+            "cookie_accept": s["cookie_accept"], "cookie_reject": s["cookie_reject"], "privacy_url": s["privacy_url"],
+        }
+        if code == "pl":
+            values["cookie_text"] = fix_orphans(values["cookie_text"])
+        html_out = re.sub(r"{{(\w+)}}", lambda m: values[m.group(1)], template)
+        out = SITE / d["path"].strip("/") / "index.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(html_out, encoding="utf-8")
+        print(f"wrote {out.relative_to(ROOT)}  ({BASE + d['path']})")
 
 
 if __name__ == "__main__":

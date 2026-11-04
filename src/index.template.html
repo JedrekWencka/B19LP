@@ -233,13 +233,24 @@
   <nav aria-label="{{aria_footer_nav}}">
     <a href="#top" class="is-active">{{nav_home}}</a><a href="#work">{{nav_work}}</a><a href="#studio">{{nav_studio}}</a><a href="#services">{{nav_services}}</a><a href="#contact">{{nav_contact}}</a>
   </nav>
-  <div class="footer-mid"><span>© <span data-year></span> B19 · JĘDRZEJ WENCKA</span><span class="footer-lang">{{lang_switch}}</span></div>
+  <div class="footer-mid"><span>© <span data-year></span> B19 · JĘDRZEJ WENCKA</span><span class="footer-lang">{{lang_switch}}</span><a href="#" class="footer-cookies" data-consent-open>{{cookie_link}}</a></div>
   <div class="footer-right">
     <a href="https://www.instagram.com/stifflerri" target="_blank" rel="noopener" data-social="instagram">INSTAGRAM</a>
     <a href="https://www.youtube.com/impalaband" target="_blank" rel="noopener" data-social="youtube">YOUTUBE</a>
   </div>
 </footer>
 
+<!-- ============ COOKIE CONSENT (see js/consent.js) ============ -->
+<div class="consent mono" data-consent role="dialog" aria-live="polite" aria-label="{{cookie_aria}}" hidden>
+  <p class="consent-head"><span class="rec-dot live" aria-hidden="true"></span>{{cookie_head}}</p>
+  <p class="consent-text">{{cookie_text}}</p>
+  <div class="consent-btns">
+    <button type="button" class="consent-accept" data-consent-accept>{{cookie_accept}}</button>
+    <button type="button" class="consent-reject" data-consent-reject>{{cookie_reject}}</button>
+  </div>
+</div>
+
+<script src="/js/consent.js?v={{v}}"></script>
 <script src="/js/work-data.js?v={{v}}"></script>
 <script src="/js/peaks.js?v={{v}}"></script>
 <script src="/js/main.js?v={{v}}"></script>

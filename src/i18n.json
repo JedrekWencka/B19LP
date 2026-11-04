@@ -54,7 +54,13 @@
     "aria_open_photo": "Open photo",
     "aria_prev": "Previous photo",
     "aria_next": "Next photo",
-    "aria_close": "Close"
+    "aria_close": "Close",
+    "cookie_aria": "Cookie consent",
+    "cookie_head": "SIGNAL CHECK",
+    "cookie_text": "This site uses Google Analytics cookies to count visits and see which tracks get played. Nothing is collected unless you accept. You can change your mind any time via COOKIES in the footer.",
+    "cookie_accept": "ACCEPT",
+    "cookie_reject": "REJECT",
+    "cookie_link": "COOKIES"
   },
   "pl": {
     "meta_title": "B19 — Jędrzej Wencka · Nagrania, miks i mastering",
@@ -111,6 +117,12 @@
     "aria_open_photo": "Otwórz zdjęcie",
     "aria_prev": "Poprzednie zdjęcie",
     "aria_next": "Następne zdjęcie",
-    "aria_close": "Zamknij"
+    "aria_close": "Zamknij",
+    "cookie_aria": "Zgoda na pliki cookie",
+    "cookie_head": "KONTROLA SYGNAŁU",
+    "cookie_text": "Ta strona używa plików cookie Google Analytics, żeby liczyć odwiedziny i sprawdzać, które utwory są odtwarzane. Bez Twojej zgody nic nie jest zbierane. Decyzję możesz zmienić w każdej chwili przez link COOKIES w stopce.",
+    "cookie_accept": "AKCEPTUJĘ",
+    "cookie_reject": "ODRZUCAM",
+    "cookie_link": "COOKIES"
   }
 }

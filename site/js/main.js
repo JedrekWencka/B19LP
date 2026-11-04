@@ -451,6 +451,7 @@
       return;
     }
     current = { item, li };
+    if (window.b19track) window.b19track("play_track", { track: `${item.artist} — ${item.title}` });
     audio.src = srcFor(item, quality);
     audio.play().catch(() => {});
     deck.hidden = false;
@@ -578,6 +579,7 @@
     if (!emb) { window.open(item.link, "_blank", "noopener"); return; }
     closeEmbed();
     if (current && !audio.paused) audio.pause();
+    if (window.b19track) window.b19track("play_embed", { track: `${item.artist} — ${item.title}` });
 
     const panel = document.createElement("li");
     panel.className = "work-embed";
@@ -623,7 +625,7 @@
       [idx + 1, idx - 1].forEach(n => { const nb = gItems[(n + gItems.length) % gItems.length]; new Image().src = nb.dataset.full; });
     };
     gItems.forEach((b, i) => {
-      b.addEventListener("click", () => { show(i); lb.showModal(); document.body.style.overflow = "hidden"; });
+      b.addEventListener("click", () => { if (window.b19track) window.b19track("gallery_open", { photo: i + 1 }); show(i); lb.showModal(); document.body.style.overflow = "hidden"; });
       if (!reduceMotion) b.addEventListener("mouseenter", () => {
         b.classList.remove("glitch"); void b.offsetWidth; b.classList.add("glitch");
       });

@@ -15,24 +15,24 @@
   <link rel="stylesheet" href="/css/styles.css?v={{v}}">
 </head>
 <body class="legal-page">
+<a class="skip-link mono" href="#content">{{skip_link}}</a>
 
 <header class="legal-header mono">
   <a class="logo" href="{{home}}">B19 <span aria-hidden="true">©</span></a>
   <div class="lang-switch" aria-label="{{aria_language}}">{{lang_switch}}</div>
 </header>
 
-<main class="legal">
+<main class="legal" id="content">
   <a class="legal-back mono" href="{{home}}">{{back}}</a>
   <h1 class="mono">{{heading}}</h1>
   <p class="legal-updated mono">{{updated_label}}: {{updated}}</p>
   <p class="legal-intro">{{intro}}</p>
 {{sections_html}}
-  <p class="legal-cookies mono"><a href="#" data-consent-open>{{cookie_link}} →</a></p>
-</main>
+{{bottom_link}}</main>
 
 <footer class="footer mono legal-footer">
   <span>© <span data-year>2026</span> B19 · JĘDRZEJ WENCKA</span>
-  <a href="#" class="footer-cookies" data-consent-open>{{cookie_link}}</a>
+  <span class="footer-legal"><a href="{{privacy_url}}" class="footer-cookies">{{privacy_link}}</a><a href="{{a11y_url}}" class="footer-cookies">{{a11y_link}}</a><a href="#" class="footer-cookies" data-consent-open>{{cookie_link}}</a></span>
 </footer>
 
 <!-- ============ COOKIE CONSENT (see js/consent.js) ============ -->

@@ -63,7 +63,10 @@
     "cookie_link": "COOKIES",
     "privacy_url": "/privacy/",
     "privacy_link": "PRIVACY",
-    "cookie_more": "Privacy policy"
+    "cookie_more": "Privacy policy",
+    "a11y_url": "/accessibility/",
+    "a11y_link": "ACCESSIBILITY",
+    "skip_link": "Skip to content"
   },
   "pl": {
     "meta_title": "B19 — Jędrzej Wencka · Nagrania, miks i mastering",
@@ -129,6 +132,9 @@
     "cookie_link": "COOKIES",
     "privacy_url": "/pl/prywatnosc/",
     "privacy_link": "PRYWATNOŚĆ",
-    "cookie_more": "Polityka prywatności"
+    "cookie_more": "Polityka prywatności",
+    "a11y_url": "/pl/dostepnosc/",
+    "a11y_link": "DOSTĘPNOŚĆ",
+    "skip_link": "Przejdź do treści"
   }
 }

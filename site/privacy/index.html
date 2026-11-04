@@ -12,16 +12,17 @@
   <link rel="alternate" hreflang="pl" href="https://b19studio.net/pl/prywatnosc/">
   <link rel="alternate" hreflang="x-default" href="https://b19studio.net/privacy/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/styles.css?v=202611041752">
+  <link rel="stylesheet" href="/css/styles.css?v=202611041800">
 </head>
 <body class="legal-page">
+<a class="skip-link mono" href="#content">Skip to content</a>
 
 <header class="legal-header mono">
   <a class="logo" href="/">B19 <span aria-hidden="true">©</span></a>
   <div class="lang-switch" aria-label="Language"><a href="/privacy/" hreflang="en" lang="en" class="is-active" aria-current="true">EN</a><span class="sep">/</span><a href="/pl/prywatnosc/" hreflang="pl" lang="pl">PL</a></div>
 </header>
 
-<main class="legal">
+<main class="legal" id="content">
   <a class="legal-back mono" href="/">← BACK TO B19</a>
   <h1 class="mono">PRIVACY POLICY</h1>
   <p class="legal-updated mono">Last updated: 2026-11-04</p>
@@ -64,7 +65,7 @@
 
 <footer class="footer mono legal-footer">
   <span>© <span data-year>2026</span> B19 · JĘDRZEJ WENCKA</span>
-  <a href="#" class="footer-cookies" data-consent-open>COOKIES</a>
+  <span class="footer-legal"><a href="/privacy/" class="footer-cookies">PRIVACY</a><a href="/accessibility/" class="footer-cookies">ACCESSIBILITY</a><a href="#" class="footer-cookies" data-consent-open>COOKIES</a></span>
 </footer>
 
 <!-- ============ COOKIE CONSENT (see js/consent.js) ============ -->
@@ -77,7 +78,7 @@
   </div>
 </div>
 
-<script src="/js/consent.js?v=202611041752"></script>
+<script src="/js/consent.js?v=202611041800"></script>
 <script>document.querySelectorAll("[data-year]").forEach(function (e) { e.textContent = new Date().getFullYear(); });</script>
 </body>
 </html>

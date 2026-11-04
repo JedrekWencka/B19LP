@@ -604,3 +604,21 @@ body.deck-open .consent { bottom: calc(var(--gutter) + 80px); }
 .legal code { font-family: var(--mono); font-size: 13px; color: #fff; background: #151515; padding: 1px 5px; }
 .legal .legal-cookies { margin-top: 48px; font-size: 12px; letter-spacing: .12em; }
 .legal-footer { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-top: 1px solid #222; }
+
+/* ============ ACCESSIBILITY ============ */
+/* visible keyboard focus everywhere (mouse clicks don't show it) */
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.skip-link {
+  position: fixed; left: var(--gutter); top: 10px; z-index: 100;
+  padding: 10px 14px; background: var(--green); color: #000; font-size: 12px; letter-spacing: .12em;
+  transform: translateY(-200%); transition: transform .15s;
+}
+.skip-link:focus { transform: none; }
+main#content:focus { outline: none; }
+.footer-legal { flex-wrap: wrap; justify-content: center; }
+.legal .legal-contact { list-style: none; padding-left: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-b19.glitching::before, .hero-b19.glitching::after,
+  .g-item.glitch img, .statement .caret, .rec-dot.live { animation: none !important; }
+  .skip-link { transition: none; }
+}

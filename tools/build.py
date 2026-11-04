@@ -7,8 +7,8 @@ Builds the site pages from one template + translations.
         -> site/pl/index.html   (Polish)             https://b19studio.net/pl/
         -> site/sitemap.xml, site/robots.txt
 
-    src/privacy.template.html  +  src/privacy.json
-        -> site/privacy/index.html, site/pl/prywatnosc/index.html
+    src/legal.template.html  +  src/privacy.json / src/accessibility.json
+        -> site/privacy/, site/pl/prywatnosc/, site/accessibility/, site/pl/dostepnosc/
 
 Run after editing the template or the translations:
 
@@ -162,7 +162,8 @@ def main() -> int:
         out.write_text(html, encoding="utf-8")
         print(f"wrote {out.relative_to(ROOT)}  ({url})")
 
-    build_privacy(strings, version)
+    for name in ("privacy", "accessibility"):
+        build_legal(name, strings, version)
 
     today = time.strftime("%Y-%m-%d")
     alts = "".join(
@@ -187,10 +188,10 @@ def fix_orphans_html(markup: str) -> str:
     return "".join(part if part.startswith("<") else fix_orphans(part) for part in re.split(r"(<[^>]+>)", markup))
 
 
-def build_privacy(strings: dict, version: str) -> None:
-    """src/privacy.template.html + src/privacy.json -> site/privacy/ and site/pl/prywatnosc/"""
-    template = (SRC / "privacy.template.html").read_text(encoding="utf-8")
-    data = json.loads((SRC / "privacy.json").read_text(encoding="utf-8"))
+def build_legal(name: str, strings: dict, version: str) -> None:
+    """src/legal.template.html + src/<name>.json -> one page per language (paths set in the json)."""
+    template = (SRC / "legal.template.html").read_text(encoding="utf-8")
+    data = json.loads((SRC / f"{name}.json").read_text(encoding="utf-8"))
     paths = {code: data[code]["path"] for code in LANGS}
     for code in LANGS:
         d = data[code]
@@ -214,7 +215,11 @@ def build_privacy(strings: dict, version: str) -> None:
             "aria_language": s["aria_language"], "cookie_link": s["cookie_link"], "cookie_aria": s["cookie_aria"],
             "cookie_head": s["cookie_head"], "cookie_text": s["cookie_text"], "cookie_more": s["cookie_more"],
             "cookie_accept": s["cookie_accept"], "cookie_reject": s["cookie_reject"], "privacy_url": s["privacy_url"],
+            "privacy_link": s["privacy_link"], "a11y_url": s["a11y_url"], "a11y_link": s["a11y_link"], "skip_link": s["skip_link"],
         }
+        values["bottom_link"] = (
+            f'  <p class="legal-cookies mono"><a href="#" data-consent-open>{s["cookie_link"]} →</a></p>\n' if name == "privacy" else ""
+        )
         if code == "pl":
             values["cookie_text"] = fix_orphans(values["cookie_text"])
         html_out = re.sub(r"{{(\w+)}}", lambda m: values[m.group(1)], template)

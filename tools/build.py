@@ -3,22 +3,23 @@
 Builds the site pages from one template + translations.
 
     src/index.template.html  +  src/i18n.json
-        -> site/index.html      (English, default)   https://b19studio.net/
-        -> site/pl/index.html   (Polish)             https://b19studio.net/pl/
-        -> site/sitemap.xml, site/robots.txt
+        -> dist/index.html      (English, default)   https://b19studio.net/
+        -> dist/pl/index.html   (Polish)             https://b19studio.net/pl/
+        -> dist/sitemap.xml, dist/robots.txt
 
     src/legal.template.html  +  src/privacy.json / src/accessibility.json
-        -> site/privacy/, site/pl/prywatnosc/, site/accessibility/, site/pl/dostepnosc/
+        -> dist/privacy/, dist/pl/prywatnosc/, dist/accessibility/, dist/pl/dostepnosc/
 
-Run after editing the template or the translations:
-
-    python3 tools/build.py
+Normally run by ./site.sh (build / serve / preview / deploy), which first copies site/
+(the static files) into dist/. Output folder: $OUT_DIR (default dist/).
+SITE_ENV=preview adds noindex to every page and blocks robots.txt.
 
 The version number (?v=…) on CSS/JS links is bumped automatically so browsers
 pick up changes straight away.
 """
 import html
 import json
+import os
 import re
 import sys
 import time
@@ -26,13 +27,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
-SITE = ROOT / "site"
+SITE = ROOT / "site"                                   # static files + work-data.js (input)
+OUT = Path(os.environ.get("OUT_DIR") or ROOT / "dist")  # generated pages (output)
+PREVIEW = os.environ.get("SITE_ENV") == "preview"
 BASE = "https://b19studio.net"
 
 LANGS = {
     # code: (output file, public URL)
-    "en": (SITE / "index.html", f"{BASE}/"),
-    "pl": (SITE / "pl" / "index.html", f"{BASE}/pl/"),
+    "en": (OUT / "index.html", f"{BASE}/"),
+    "pl": (OUT / "pl" / "index.html", f"{BASE}/pl/"),
 }
 
 
@@ -40,6 +43,13 @@ LANGS = {
 # Glue it to the next word with a non-breaking space.
 ORPHAN = re.compile(r"(?<![\w&])([AaIiOoUuWwZz])\s+")
 NO_ORPHAN_KEYS = {"og_locale", "og_locale_alt"}
+
+
+def hide_if_preview(markup: str) -> str:
+    """Preview builds must never be indexed."""
+    if not PREVIEW:
+        return markup
+    return re.sub(r"(<head[^>]*>)", r'\1\n  <meta name="robots" content="noindex, nofollow, noarchive">', markup, count=1)
 
 
 def fix_orphans(text: str) -> str:
@@ -159,7 +169,7 @@ def main() -> int:
         values.update(gallery_html=gh, gallery_count=f"{gn:02d}")
         html = re.sub(r"{{(\w+)}}", lambda m: values[m.group(1)], template)
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(html, encoding="utf-8")
+        out.write_text(hide_if_preview(html), encoding="utf-8")
         print(f"wrote {out.relative_to(ROOT)}  ({url})")
 
     for name in ("privacy", "accessibility"):
@@ -172,14 +182,19 @@ def main() -> int:
     urls = "".join(
         f"\n  <url>\n    <loc>{u}</loc>\n    <lastmod>{today}</lastmod>{alts}\n  </url>" for _, (_, u) in LANGS.items()
     )
-    (SITE / "sitemap.xml").write_text(
+    if PREVIEW:
+        (OUT / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+        (OUT / "sitemap.xml").unlink(missing_ok=True)
+        print("preview: noindex + robots.txt Disallow, no sitemap")
+        return 0
+    (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
         f"{urls}\n</urlset>\n",
         encoding="utf-8",
     )
-    (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n", encoding="utf-8")
-    print("wrote site/sitemap.xml, site/robots.txt")
+    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n", encoding="utf-8")
+    print("wrote dist/sitemap.xml, dist/robots.txt")
     return 0
 
 
@@ -223,9 +238,9 @@ def build_legal(name: str, strings: dict, version: str) -> None:
         if code == "pl":
             values["cookie_text"] = fix_orphans(values["cookie_text"])
         html_out = re.sub(r"{{(\w+)}}", lambda m: values[m.group(1)], template)
-        out = SITE / d["path"].strip("/") / "index.html"
+        out = OUT / d["path"].strip("/") / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(html_out, encoding="utf-8")
+        out.write_text(hide_if_preview(html_out), encoding="utf-8")
         print(f"wrote {out.relative_to(ROOT)}  ({BASE + d['path']})")
 
 

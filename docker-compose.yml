@@ -1,20 +1,18 @@
-# B19 landing page — nginx serving ./site
-# No public port: the band site's nginx (ww-landing, ports 80/443) proxies
-# b19studio.net to this container over the shared Docker network below.
+# The same file in every landing-page repo. site.sh copies it to /opt/<name>/ on the server
+# and writes the .env next to it (container name, the edge network, the preview port).
+# Production containers have no public port: ww-landing (ports 80/443) proxies the domain
+# to them by container name over its Docker network.
 services:
-  b19-landing:
+  web:
     image: nginx:1.27-alpine
-    container_name: b19-landing
+    container_name: ${CONTAINER:?set by site.sh}
     restart: unless-stopped
     volumes:
-      - ./site:/usr/share/nginx/html:ro
-      # mount the folder (not the single file) so git pull updates are seen by nginx
-      - ./deploy/nginx:/etc/nginx/conf.d:ro
-    networks:
-      - default
-      - web
+      - ./html:/usr/share/nginx/html:ro
+      - ./nginx:/etc/nginx/conf.d:ro
+    networks: [edge]
 
 networks:
-  web:
+  edge:
     external: true
     name: ${WW_NETWORK:-ww_landing_default}

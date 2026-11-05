@@ -1,0 +1,5 @@
+# Added on top of docker-compose.yml for `./site.sh preview`: publishes the container on a port.
+services:
+  web:
+    ports:
+      - "${PREVIEW_PORT:?set by site.sh}:80"
